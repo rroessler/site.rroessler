@@ -1,0 +1,27 @@
+{
+    "private": true,
+    "license": "MIT",
+    "type": "module",
+    "name": "rroessler",
+    "version": "0.0.2",
+    "scripts": {
+        "dev": "next dev ./source",
+        "start": "next start ./source",
+        "build": "next build ./source"
+    },
+    "dependencies": {
+        "@phosphor-icons/core": "^2.1.1",
+        "@phosphor-icons/react": "^2.1.10",
+        "clsx": "^2.1.1",
+        "halfmoon": "^2.0.2",
+        "next": "^16.0.1",
+        "nextra": "^4.6.0",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0"
+    },
+    "devDependencies": {
+        "@types/node": "24.9.2",
+        "@types/react": "^19.2.2",
+        "typescript": "^5.9.3"
+    }
+}

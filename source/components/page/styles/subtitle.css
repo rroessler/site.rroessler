@@ -1,0 +1,15 @@
+/*----------  Subtitle Styling  ----------*/
+
+.page-subtitle {
+    position: relative;
+    overflow: hidden;
+    padding-left: 2ch;
+}
+
+.page-subtitle:before {
+    content: '#\a#\a#\a#\a#\a#\a#\a#\a#\a#\a';
+    white-space: pre;
+    position: absolute;
+    left: 0;
+    top: 0;
+}

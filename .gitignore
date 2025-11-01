@@ -1,0 +1,14 @@
+# Node Dependencies
+node_modules/
+
+# Output Files
+out/
+dist/
+.next/
+*.tsbuildinfo
+
+# Environment Variables
+*.env
+
+# Platform Files
+.DS_Store

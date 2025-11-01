@@ -1,0 +1,5 @@
+/*----------  Subtitle Styling  ----------*/
+
+.page-overview:hover {
+    color: hsla(var(--bs-link-hover-color-hsl), var(--bs-link-opacity, 1));
+}
