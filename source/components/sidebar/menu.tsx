@@ -4,9 +4,9 @@
 import * as React from 'react';
 import { usePathname } from 'next/navigation';
 import { FrontMatter, PageMapItem } from 'nextra';
-import { normalizePages } from 'nextra/normalize-pages';
 
 /// Package Modules
+import { Router } from '@/router';
 import { Product } from '@/product';
 
 /// Website Modules
@@ -25,7 +25,7 @@ export function Menu({ pages }: Menu) {
     const header = 'offcanvas-header position-relative justify-content-start flex-shrink-0 py-0 border-bottom';
 
     // normalize the incoming pages against the root now
-    const { activePath, docsDirectories, topLevelNavbarItems } = normalizePages({ list: pages, route: pathname });
+    const { activePath, docsDirectories, topLevelNavbarItems } = Router.Posts.normalize(pathname, pages);
 
     // check if "docs" mode or not
     const docs = !!docsDirectories.length;
@@ -59,6 +59,7 @@ export namespace Menu {
     /** Menu Component Properties. */
     export type Props = { pages: PageMapItem[] };
 
+    /** The underlying menu item. */
     export interface Item {
         name: string;
         route: string;
@@ -77,7 +78,7 @@ export namespace Menu {
     /** Prepare the underlying page-map item. */
     export function Item(item: Item, docs: boolean, index: number) {
         // ensure we slice our children based on the docs-length
-        const recent = (item.children ?? []).slice(0, docs ? 5 : undefined);
+        const recent = Router.Posts.filter(item.children ?? [], item.route === '/posts').slice(0, docs ? 5 : undefined);
 
         // attempt getting any potential children now
         const children = recent.map((child) => (

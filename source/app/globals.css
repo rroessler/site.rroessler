@@ -1,0 +1,34 @@
+/*----------  Import Styling  ----------*/
+
+@import 'tailwindcss' source(none) prefix(x);
+
+/*----------  Pre Styling  ----------*/
+
+[data-bs-theme='dark'] .nextra-code span {
+    @apply x:bg-(--shiki-dark-bg) x:text-(--shiki-dark);
+}
+
+[data-bs-theme='light'] .nextra-code span {
+    @apply x:bg-(--shiki-light-bg) x:text-(--shiki-light);
+}
+
+pre code {
+    @apply x:text-sm!;
+}
+
+/*----------  Anchor Styling  ----------*/
+
+a:not(.card-body, .nav-anchor, .nav-link) {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+/*----------  Blockquote Styling  ----------*/
+
+blockquote {
+    padding-left: 1rem;
+    color: var(--bs-secondary-color);
+    border-left: 4px solid var(--bs-border-color);
+}

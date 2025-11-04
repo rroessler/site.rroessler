@@ -1,0 +1,32 @@
+---
+title: Faster Globbing
+date: 2025-11-02
+description: Efficient, compact and robust cross-platform C++ globbing.
+href: https://github.com/rroessler/cpp.aster
+---
+
+import { Blog } from '@/components';
+
+<Blog.Header {...metadata} />
+
+> "Globbing is that act of defining one or more glob patterns, and yielding files from either the resulting inclusive or exclusive matches"
+> &mdash; [Microsoft File Globbing](https://learn.microsoft.com/en-us/dotnet/core/extensions/file-globbing)
+
+Whilst I was developing a testing framework for [Talos](/projects/talos), I found myself needing a reasonably performant file-globbing library. However, after spending some time searching, I could not find any adequate C++ solutions.
+
+As such I decided to go down the rabbit-hole constructing one myself and seeing how I could possible improve performance where necessary.
+
+<h4 className="mt-4">Humble Beginnings</h4>
+
+Before worrying about recursing over directories and improving performance, I looked around for an already performant glob matching implementation. This is where I came across [`oxc-project/fast-glob`](https://github.com/oxc-project/fast-glob), which does just that. This would allow me to write the following for any path that could be matched:
+
+```cpp
+// a complex glob that requires the matching algorithm
+auto glob = "some/**/path/**/n*[k-m]e?txt";
+
+// a potential path that should succeed
+auto path = "some/small/or/large/path/to/a/needle.txt";
+
+// the current reference implementation for glob matching
+assert(Aster::Match::glob(glob, path));
+```

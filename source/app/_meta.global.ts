@@ -3,24 +3,25 @@ import type { MetaRecord } from 'nextra';
 
 /** All available posts. */
 const POSTS: MetaRecord = {
-    index: { title: 'Blog', display: 'hidden' },
+    index: { type: 'page', display: 'hidden' },
 };
 
 /** All available projects. */
 const PROJECTS: MetaRecord = {
-    index: { title: 'Projects', display: 'hidden' },
+    index: { type: 'page', display: 'hidden' },
 
-    talos: { title: 'Talos', display: 'hidden' },
-    website: { title: 'Website' },
+    aster: { type: 'doc', display: 'hidden' },
+    talos: { type: 'doc', display: 'hidden' },
+    website: { type: 'doc' },
 };
 
 /** Defines necessary metadata details. */
 export default {
     index: { type: 'page', title: 'Home', display: 'hidden' },
 
-    about: { type: 'page', title: 'About' },
-    resources: { type: 'page', title: 'Resources' },
+    about: { type: 'page' },
+    resources: { type: 'page' },
 
     posts: { type: 'page', title: 'Blog', items: POSTS },
-    projects: { type: 'page', title: 'Projects', items: PROJECTS },
+    projects: { type: 'page', items: PROJECTS },
 };

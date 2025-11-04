@@ -3,24 +3,23 @@ import './styles/overview.css';
 
 /// Vendor Modules
 import { clsx } from 'clsx';
+import { ReadingTime } from 'nextra';
 import { getPageMap } from 'nextra/page-map';
-import { FrontMatter, ReadingTime } from 'nextra';
-import { normalizePages } from 'nextra/normalize-pages';
 import { ClockIcon } from '@phosphor-icons/react/dist/ssr';
 
+/// Package Modules
+import { Router } from '@/router';
+
 /// Website Modules
+import { Date } from '../date';
 import { Anchor } from '../anchor';
 
 /** Overview Component. */
 export interface Overview extends Overview.Props {}
-export async function Overview({ route, title, limit }: Overview) {
-    const list = await getPageMap(); // prepare list now
-    const { docsDirectories } = normalizePages({ list, route });
-
-    // from here we map our items into cards to be shown
-    const items = (docsDirectories as Overview.Card[])
-        .filter((item) => item.name !== 'index')
-        .sort((a, b) => +new Date(b.frontMatter?.date) - +new Date(a.frontMatter?.date));
+export async function Overview({ route, title, limit, nested }: Overview) {
+    // attempt getting all the available overview cards to be used
+    const { docsDirectories } = Router.Posts.normalize(route, await getPageMap());
+    const items: Overview.Card[] = Router.Posts.filter(docsDirectories, nested);
 
     // prepare the children now
     const children = items.slice(0, limit).map(Overview.Card);
@@ -43,16 +42,17 @@ export namespace Overview {
         route: string;
         title?: string;
         limit?: number;
+        nested?: boolean;
     }
 
     //  PUBLIC METHODS  //
 
     /** Overview Card Display. */
-    export type Card = { name: string; title?: string; route: string; frontMatter: FrontMatter };
+    export interface Card extends Router.Posts.Item {}
     export function Card(card: Card) {
         // prepare our necessary metadata to be used
-        const date = m_date(card.frontMatter.date);
-        const reading = m_reading(card.frontMatter.readingTime, !date);
+        const date = Date({ value: card.frontMatter?.date });
+        const reading = m_reading(card.frontMatter?.readingTime, !date);
         const title = <h4 key="title" className="mb-0 me-auto" children={card.title} />;
 
         // prepare the children to be used now
@@ -69,26 +69,6 @@ export namespace Overview {
     }
 
     //  PRIVATE METHODS  //
-
-    /**
-     * Constructs a suitable date value.
-     * @param input                 Input to inherit.
-     */
-    function m_date(input: any) {
-        if (typeof input === 'string') return m_date(new Date(input));
-        else if (!(input instanceof Date)) return null; // ignore now
-
-        // prepare the formats to be used
-        const long: Intl.DateTimeFormatOptions = { month: 'long', day: '2-digit', year: 'numeric' };
-
-        // and construct the resulting time instance
-        return (
-            <time key="date" dateTime={input.toISOString()}>
-                <span className="d-inline-block d-md-none">{input.toLocaleDateString()}</span>
-                <span className="d-none d-md-inline-block">{input.toLocaleString('default', long)}</span>
-            </time>
-        );
-    }
 
     /**
      * Constructs reading time details.

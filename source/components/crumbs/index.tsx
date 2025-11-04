@@ -4,6 +4,8 @@
 import { clsx } from 'clsx';
 import * as React from 'react';
 import { usePathname } from 'next/navigation';
+import { PageMapItem } from 'nextra';
+import { Router } from '@/router';
 
 /** Breadcrumbs Component. */
 export interface Crumbs extends Crumbs.Props {}
@@ -20,7 +22,7 @@ export function Crumbs({ children, divider, className, style, ...props }: Crumbs
 
     // and construct the breadcrumbs now
     return (
-        <ol className={clsx('breadcrumb', className)} style={style} {...props}>
+        <ol className={clsx('breadcrumb text-capitalize', className)} style={style} {...props}>
             {React.Children.map(children, (child) => {
                 return <li className="breadcrumb-item active">{child}</li>;
             })}
@@ -30,11 +32,17 @@ export function Crumbs({ children, divider, className, style, ...props }: Crumbs
 
 /** Path Crumbs Component. */
 export interface Pathname extends Omit<Crumbs.Props, 'children'> {}
-export const Pathname = (props: Pathname) => {
-    const pathname = usePathname(); // prepare pathname
-    let children = pathname.split('/').filter(Boolean);
-    if (children.length === 0) children.push('home'); // push the base home value
-    children = children.map((child) => child[0].toUpperCase() + child.slice(1));
+export const Pathname = ({ title, pages, ...props }: Pathname) => {
+    const pathname = usePathname(); // prepare pathname and the active-path now
+    const active = Router.Posts.normalize(pathname, pages ?? []).activePath.at(-1);
+
+    // construct the baseline children to be used as necessary
+    let children = pathname.split('/').filter(Boolean).slice(0, -1);
+
+    // push our incoming details if necessary now
+    if (typeof active?.title === 'string') children.push(active.title);
+    if (children.length === 0) children.push('home'); // ensure index
+
     const mapped = children.map((child, index) => (index ? child : <strong>{child}</strong>));
     return <Crumbs {...props}>{mapped}</Crumbs>; // ensure we convert to normal crumbs
 };
@@ -48,5 +56,6 @@ export namespace Crumbs {
     /** Breadcrumbs Component Properties. */
     export type Props = React.JSX.IntrinsicElements['ol'] & {
         divider?: string;
+        pages?: PageMapItem[];
     };
 }

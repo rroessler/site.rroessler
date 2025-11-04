@@ -4,6 +4,9 @@ import { Router } from '@/router';
 /** Prepare the content controller. */
 const content = new Router.Content();
 
+/** Force dynamic parameters to fail when necessary. */
+export const dynamicParams = false;
+
 /** How to generate the static parameters. */
 export const generateStaticParams = content.static();
 

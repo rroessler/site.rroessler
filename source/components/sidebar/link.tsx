@@ -8,12 +8,14 @@ import { usePathname } from 'next/navigation';
 /// Package Modules
 import { Menu } from './menu';
 import { Anchor } from '../anchor';
+import { Context } from './context';
 
 /** Sidebar Link Component. */
 export interface Link extends Link.Props {}
 export function Link({ active, header, page, className, style, children, ...props }: Link) {
     // get the current pathname details
     const pathname = usePathname();
+    const sidebar = Context.Use();
 
     // pull out some properties to be used
     const href = page.route;
@@ -25,6 +27,9 @@ export function Link({ active, header, page, className, style, children, ...prop
     className = clsx('d-flex text-decoration-none', className);
     className = clsx(header ? 'nav-anchor fw-medium' : 'nav-link', className);
     if (color) (className = clsx('active', className)), (style = { color, ...style });
+
+    // prepare the click-handler to close the sidebar now
+    props.onClick ??= () => sidebar.close();
 
     // and construct the resulting link to be used now
     return <Anchor className={className} href={href} style={style} {...props} children={children} />;

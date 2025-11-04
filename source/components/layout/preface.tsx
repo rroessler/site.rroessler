@@ -8,7 +8,12 @@ import 'halfmoon/css/cores/halfmoon.modern.css';
 /** Preface Component. */
 export interface Preface extends Preface.Props {}
 export function Preface({ children }: Preface) {
-    return <Head>{children}</Head>;
+    return (
+        <Head>
+            <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+            {children /** append the children afterwards now */}
+        </Head>
+    );
 }
 
 export namespace Preface {

@@ -11,13 +11,13 @@ export function Layout({ pages, children }: Layout) {
     return (
         <html
             lang="en"
-            className="bg-body-secondary"
             suppressHydrationWarning
+            className="bg-body-secondary"
             data-bs-theme="dark"
             data-bs-core="modern"
         >
             <Preface />
-            <Body pages={pages}>{children}</Body>
+            <Body pages={pages} children={children} />
         </html>
     );
 }
