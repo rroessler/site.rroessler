@@ -5,14 +5,16 @@ import './styles/overview.css';
 import { clsx } from 'clsx';
 import { ReadingTime } from 'nextra';
 import { getPageMap } from 'nextra/page-map';
-import { ClockIcon } from '@phosphor-icons/react/dist/ssr';
+import { ArrowUpRightIcon, ClockIcon } from '@phosphor-icons/react/dist/ssr';
 
 /// Package Modules
 import { Router } from '@/router';
 
 /// Website Modules
 import { Date } from '../date';
+import { Brand } from '../brand';
 import { Anchor } from '../anchor';
+import { Button } from '../button';
 
 /** Overview Component. */
 export interface Overview extends Overview.Props {}
@@ -51,9 +53,10 @@ export namespace Overview {
     export interface Card extends Router.Posts.Item {}
     export function Card(card: Card) {
         // prepare our necessary metadata to be used
+        const title = m_title(card.title, card.route);
         const date = Date({ value: card.frontMatter?.date });
-        const reading = m_reading(card.frontMatter?.readingTime, !date);
-        const title = <h4 key="title" className="mb-0 me-auto" children={card.title} />;
+        const repo = m_repository(card.frontMatter?.repo, !date);
+        const reading = repo || m_reading(card.frontMatter?.readingTime, !date);
 
         // prepare the children to be used now
         const children = [title, date, reading];
@@ -61,14 +64,24 @@ export namespace Overview {
         // and attempt showing our overview of the item
         return (
             <div className="page-overview card" key={card.route}>
-                <Anchor href={card.route} className="card-body">
+                <div className="card-body">
                     <article className="d-flex gap-2 align-items-center">{children}</article>
-                </Anchor>
+                </div>
             </div>
         );
     }
 
     //  PRIVATE METHODS  //
+
+    /**
+     * Constructs a title to be used.
+     * @param title             Title value.
+     * @param route             Route value.
+     */
+    function m_title(title: React.ReactNode, route: string) {
+        const className = 'h4 mb-0 me-auto stretched-link'; // prepare the class-name
+        return <Anchor href={route} key="title" className={className} children={title} />;
+    }
 
     /**
      * Constructs reading time details.
@@ -83,6 +96,7 @@ export namespace Overview {
         let className = date ? 'd-flex' : 'd-none d-sm-flex';
         className = clsx(className, 'align-items-center ms-4');
 
+        // construct the resulting item now
         return (
             <span key="reading-time" className={className}>
                 <ClockIcon size="18" />
@@ -90,5 +104,28 @@ export namespace Overview {
                 {reading.text}
             </span>
         );
+    }
+
+    /**
+     * Constructs a repository link.
+     * @param repo                  Repository value.
+     * @param date                  Denotes if date exists.
+     */
+    function m_repository(repo?: string, date = false) {
+        // ignore if we have no repository backing
+        if (typeof repo === 'undefined') return null;
+
+        // build the underlying class-name to be used
+        let className = date ? 'd-flex' : 'd-none d-sm-flex';
+        className = clsx(className, 'align-items-center gap-1 ms-4 z-1');
+
+        // prepare the href to be used
+        const href = `${Brand.GitHub.URL()}/${repo}`;
+
+        // prepare the children to be used as well
+        const children = [<span key="label">GitHub</span>, <ArrowUpRightIcon key="icon" />];
+
+        // construct the resulting item now
+        return <Button key="repo" href={href} className={className} children={children} />;
     }
 }

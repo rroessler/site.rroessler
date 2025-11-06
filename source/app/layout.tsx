@@ -1,6 +1,9 @@
 /// CSS Modules
 import './globals.css';
 
+/// Augmentation Modules
+import '@/bootstrap';
+
 /// Vendor Modules
 import { getPageMap } from 'nextra/page-map';
 
