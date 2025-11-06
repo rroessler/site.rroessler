@@ -1,5 +1,8 @@
 'use client';
 
+/// CSS Modules
+import './styles/code.css';
+
 /// Vendor Modules
 import clsx from 'clsx';
 
@@ -21,6 +24,7 @@ export interface Code extends Code.Props {}
 export function Code({ className, ...props }: Code) {
     // ensure we modify the incoming className
     className = clsx('mb-0', className);
+    (props.style ?? {}).minWidth = 'max-content';
 
     // get the incoming language to be presented
     const language = props['data-language'];
@@ -29,7 +33,7 @@ export function Code({ className, ...props }: Code) {
     return (
         <div className="card bg-body-tertiary mb-3">
             {Code.Language(language)}
-            <div className="card-body">
+            <div className="card-body overflow-auto px-0">
                 <pre className={className} {...props}></pre>
             </div>
         </div>

@@ -1,0 +1,53 @@
+/*----------  Import Styling  ----------*/
+
+@import 'tailwindcss' source(none) prefix(x);
+
+/*----------  Pre/Code Styling  ----------*/
+
+[data-bs-theme='dark'] .nextra-code span {
+    @apply x:bg-(--shiki-dark-bg) x:text-(--shiki-dark);
+}
+
+[data-bs-theme='light'] .nextra-code span {
+    @apply x:bg-(--shiki-light-bg) x:text-(--shiki-light);
+}
+
+pre[data-language] {
+    overflow: visible;
+}
+
+pre code.nextra-code:not([class*='twoslash-']) {
+    @apply x:grid;
+    @apply x:text-sm!;
+    counter-reset: line;
+    overflow: visible;
+
+    &[data-line-numbers] > span {
+        @apply x:pl-2;
+        @apply x:before:text-gray-600 x:dark:before:text-gray-400;
+        &::before {
+            counter-increment: line;
+            content: counter(line);
+            @apply x:inline-block x:pr-4 x:text-right x:min-w-[2.6rem];
+        }
+    }
+
+    & > span {
+        @apply x:px-4;
+
+        --bs-primary-color: hsl(var(--bs-primary-hsl)); /** prepare the baseline color */
+
+        &[data-highlighted-line] {
+            @apply x:bg-(--bs-primary-color)/10 x:dark:bg-(--bs-primary-color)/20 x:shadow-[2px_0_var(--bs-primary-color)_inset];
+        }
+
+        [data-highlighted-chars] {
+            @apply x:rounded-sm x:ring-3 x:ring-(--bs-primary-color)/20 x:dark:ring-(--bs-primary-color)/40;
+            @apply x:bg-(--bs-primary-color)/20 x:dark:bg-(--bs-primary-color)/40;
+        }
+    }
+
+    html[data-nextra-word-wrap] & {
+        @apply x:max-md:whitespace-pre-wrap;
+    }
+}
