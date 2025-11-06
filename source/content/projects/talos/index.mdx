@@ -3,8 +3,26 @@ title: Talos
 ---
 
 import { Page } from '@/components';
+import { Tabs } from 'nextra/components';
 
 <Page.Title href="#">talos --help</Page.Title>
 <Page.Subtitle className="mb-4">Usage: talos &lt;command&gt; [options...]</Page.Subtitle>
 
-Todo...
+> **Note:** Talos is still in active "nightly" development and as such is not yet available. This will change in the near future!
+
+[Talos](#) is a modern, performant programming language that I have been developing over the past few years. Fundamentally Talos does not reinvent the wheel, but it instead attempts to excel at working with the user to improve development workflow. This was done by designing Talos with the following core features:
+
+-   A readable C-like syntax with Rust-like static-typing.
+-   Performant static-analysis, alongside togglable linting support.
+-   A dynamic runtime for immediate testing, and bundling options for distribution.
+-   Concurrency builtin through the custom-made green threads framework.
+-   Rich standard library, focusing on testability and scalability out-of-the-box.
+-   Gentle learning curve, with reasonable familiarity to TypeScript, Dart, Rust, and Carbon.
+
+<div className="mt-4">
+
+    ```talos
+    Debug.println("Hello, World!");
+    ```
+
+</div>

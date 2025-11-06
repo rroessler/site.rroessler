@@ -5,9 +5,9 @@
     "name": "rroessler",
     "version": "0.0.2",
     "scripts": {
-        "dev": "next dev ./source",
-        "start": "next start ./source",
-        "build": "next build ./source"
+        "dev": "next dev ./source --turbopack",
+        "start": "next start ./source --turbopack",
+        "build": "next build ./source --turbopack"
     },
     "dependencies": {
         "@phosphor-icons/core": "^2.1.1",

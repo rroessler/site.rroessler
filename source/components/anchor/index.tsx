@@ -4,7 +4,7 @@ import Link, { LinkProps } from 'next/link';
 
 /** Anchor Component. */
 export interface Anchor extends Anchor.Props {}
-export function Anchor({ href, ...props }: Anchor) {
+export function Anchor({ href = '#', ...props }: Anchor) {
     const external = !href.startsWith('/'); // check if external at all
     const target = external && !href.includes('#') ? '_blank' : undefined;
     props.className = clsx('text-decoration-none', props.className);

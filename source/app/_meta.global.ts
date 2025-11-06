@@ -1,17 +1,12 @@
 /// Vendor Modules
 import type { MetaRecord } from 'nextra';
 
-/** All available posts. */
-const POSTS: MetaRecord = {
-    index: { type: 'page', display: 'hidden' },
-};
-
 /** All available projects. */
 const PROJECTS: MetaRecord = {
     index: { type: 'page', display: 'hidden' },
 
-    aster: { type: 'doc', display: 'hidden' },
-    talos: { type: 'doc', display: 'hidden' },
+    aster: { type: 'doc' },
+    talos: { type: 'doc' },
     website: { type: 'doc' },
 };
 
@@ -22,6 +17,6 @@ export default {
     about: { type: 'page' },
     resources: { type: 'page' },
 
-    posts: { type: 'page', title: 'Blog', items: POSTS },
+    posts: { type: 'page', title: 'Blog' },
     projects: { type: 'page', items: PROJECTS },
 };

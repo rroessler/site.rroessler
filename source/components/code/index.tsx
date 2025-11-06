@@ -4,7 +4,14 @@
 import clsx from 'clsx';
 
 /// Icon Modules
-import { FileCIcon, FileCppIcon, FileJsIcon, FileTsIcon, TerminalIcon } from '@phosphor-icons/react/dist/ssr';
+import {
+    FileCIcon,
+    FileCppIcon,
+    FileJsIcon,
+    FileTsIcon,
+    SwordIcon,
+    TerminalIcon,
+} from '@phosphor-icons/react/dist/ssr';
 
 /// Website Modules
 import { Button } from '../button';
@@ -20,7 +27,7 @@ export function Code({ className, ...props }: Code) {
 
     // and construct the resulting instance now
     return (
-        <div className="card bg-body-tertiary">
+        <div className="card bg-body-tertiary mb-3">
             {Code.Language(language)}
             <div className="card-body">
                 <pre className={className} {...props}></pre>
@@ -88,7 +95,8 @@ export namespace Code {
 
             case 'sh':
             case 'bash':
-                return ['Terminal', TerminalIcon];
+            case 'shell':
+                return ['Shell', TerminalIcon];
 
             case 'js':
             case 'mjs':
@@ -101,6 +109,9 @@ export namespace Code {
             case 'cts':
             case 'typescript':
                 return ['TypeScript', FileTsIcon];
+
+            case 'talos':
+                return ['Talos', SwordIcon];
         }
     }
 }

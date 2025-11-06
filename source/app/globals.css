@@ -2,6 +2,8 @@
 
 @import 'tailwindcss' source(none) prefix(x);
 
+/* @import '../../'; */
+
 /*----------  Pre Styling  ----------*/
 
 [data-bs-theme='dark'] .nextra-code span {
@@ -14,6 +16,12 @@
 
 pre code {
     @apply x:text-sm!;
+}
+
+/*----------  List Styling  ----------*/
+
+ul {
+    list-style: disc;
 }
 
 /*----------  Anchor Styling  ----------*/

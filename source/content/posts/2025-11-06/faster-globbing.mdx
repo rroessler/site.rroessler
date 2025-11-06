@@ -1,0 +1,75 @@
+---
+title: Faster Globbing
+date: 2025-11-06
+description: Efficient, compact and robust cross-platform C++ globbing.
+href: https://github.com/rroessler/cpp.aster
+---
+
+import { Blog } from '@/components';
+
+<Blog.Header {...metadata} />
+
+> "Globbing is that act of defining one or more glob patterns, and yielding files from either the resulting inclusive or exclusive matches"
+> &mdash; [Microsoft File Globbing](https://learn.microsoft.com/en-us/dotnet/core/extensions/file-globbing)
+
+Whilst I was developing a testing framework for [Talos](/projects/talos), I found myself needing a reasonably performant file-globbing library. However, after spending some time searching, I could not find any adequate C++ solutions.
+
+As such I decided to go down the rabbit-hole constructing one myself and seeing how I could possible improve performance where necessary.
+
+<h4 className="mt-4">Glob Matching</h4>
+
+Before worrying about recursing over directories and improving performance, I looked around for an already performant glob matching implementation. This is where I came across [`oxc-project/fast-glob`](https://github.com/oxc-project/fast-glob), which does just that. This would allow me to use the following to match a path against a glob:
+
+```cpp
+// a complex glob that requires the matching algorithm
+auto glob = "some/**/path/**/n*[k-m]e?txt";
+
+// a potential path that should succeed
+auto path = "some/small/or/large/path/to/a/needle.txt";
+
+// the current reference implementation for glob matching
+assert(Aster::Match::glob(glob, path));
+```
+
+Where `Aster::Match::glob` coordinates the heavy lifting for glob matching, specifically for complex glob patterns such as above.
+
+<h4 className="mt-4">Glob Patterns</h4>
+
+Now although a fast glob matching algorithm is great for testing against a small number of paths, what happens when we attempt testing against hundreds or thousands of paths? For example, imagine if we ran this command within a large TypeScript monorepo:
+
+```shell
+ls **/*.ts # lists all ".ts" files recursively within a directory
+```
+
+It would list many files, but would also take a long time to test every file-path using the algorithm that [`oxc-project/fast-glob`](https://github.com/oxc-project/fast-glob) provides. We could instead optimize our search by only checking for the extension `.ts` of files. Additionally, suppose we searched through an explicit source directory such that we instead had `source/**/*.ts` as our glob pattern. We could narrow our search by appending the prefix to the working directory. This tells us that the pattern components could be used for optimizations.
+
+Take the glob pattern `some/prefix/**/*.md` as our example. It is comprised of a prefix `some/prefix`, a recursive match `**/*` and a suffix `.md`. By parsing these components, we can bake in optimizations to an eventual globbing iterator.
+
+<h5 className="mt-3">Components</h5>
+
+Since all globs are typically used to match against file-paths, we start by splitting patterns by their path separators. From before, `some/prefix/**/*.md` could be viewed as:
+
+```cpp
+std::vector<std::string_view> components = {
+    "some",     // literal value
+    "prefix",   // another literal
+    "**",       // globstar component
+    "*.md"      // glob extension
+};
+```
+
+Each of these components can then be categorized and certain structures of components could be used for optimizations. For this case, we would start in the `some/prefix` directory (if it exists) and then recursively check each file that they contain the correct extension.
+
+Then, since we know ahead of time that the pattern does not require specialized wildcards (eg: brace-expansion and bracket-matching), we can replace the underlying match callback with a simplified suffix match.
+
+This categorization can then be extended to other components such as negation (encapsulated as pattern metadata), or the basic `*` wildcard that would immediately match all folders for it's segment.
+
+<h5 className="mt-3">Sub-Patterns</h5>
+
+More complexely, we could also construct sub-patterns from a list of components depending on the current recursive directory level. This would then allow us to go from a complex pattern such as `**/some/infix/**/*.csv` to a more streamlined `**/*.csv` sub-pattern once we found an existing `some/infix` directory entry within the working directory.
+
+<h4 className="mt-4">Modest Beginnings</h4>
+
+Now although these optimizations are a great thought, actually implementing them is another story. For now I have been able to implement some component categorization with quite modest results, however as I wanted to get a library working firstly in C++ before worrying further, I have not yet implemented sub-patterns or other optimizations to the directory iteration portion of globbing.
+
+Regardless, I am able to present my framework [Aster](https://github.com/rroessler/cpp.aster) (a shortening of asterisk) as a reasonable first attempt at fast globbing performance for C++.

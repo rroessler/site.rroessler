@@ -1,11 +1,14 @@
-/// Vendor Modules
-import nextra from 'nextra';
+/// Bootstrap Modules
+import './source/bootstrap';
 
-/** Prepare the "nextra" configuration builder. */
-const setup = nextra({ readingTime: true });
+/// Vendor Modules
+import * as nextra from 'nextra';
+
+/** Prepare the layers to be used. */
+let configuration = nextra.default({ readingTime: true });
 
 /** Expose the underlying configuration. */
-export default setup({
+export default configuration({
     output: 'export',
     reactStrictMode: true,
     turbopack: {
