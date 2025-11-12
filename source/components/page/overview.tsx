@@ -2,7 +2,6 @@
 import './styles/overview.css';
 
 /// Vendor Modules
-import { clsx } from 'clsx';
 import { ReadingTime } from 'nextra';
 import { getPageMap } from 'nextra/page-map';
 import { ArrowUpRightIcon, ClockIcon } from '@phosphor-icons/react/dist/ssr';
@@ -12,6 +11,7 @@ import { Router } from '@/router';
 
 /// Website Modules
 import { Date } from '../date';
+import { Badge } from '../badge';
 import { Brand } from '../brand';
 import { Anchor } from '../anchor';
 import { Button } from '../button';
@@ -52,22 +52,33 @@ export namespace Overview {
     /** Overview Card Display. */
     export interface Card extends Router.Posts.Item {}
     export function Card(card: Card) {
+        // check if we should show extra details at all
+        const project = card.route.startsWith('/projects');
+
         // prepare our necessary metadata to be used
         const title = m_title(card.title, card.route);
         const date = Date({ value: card.frontMatter?.date });
-        const repo = m_repository(card.frontMatter?.repo, !date);
-        const reading = repo || m_reading(card.frontMatter?.readingTime, !date);
+        const repository = m_repository(card.frontMatter?.repo, !date);
+        const description = <div key="description">{card.frontMatter?.description}</div>;
+
+        // convert all the incoming tags now
+        const tags = m_tags(card.frontMatter?.tags ?? []);
+
+        // prepare the extra details to be appended now
+        const leading = <span key="tags" className="d-flex align-items-center gap-2 me-auto" children={tags} />;
+        const trailing = repository || (project ? null : m_reading(card.frontMatter?.readingTime, !date));
+        const extra = <div key="body" className="mt-3 d-flex gap-2" children={[leading, trailing]} />;
 
         // prepare the children to be used now
-        const children = [title, date, reading];
+        const header = [title, date];
+        const body = [description, extra];
 
         // and attempt showing our overview of the item
         return (
-            <div className="page-overview card" key={card.route}>
-                <div className="card-body">
-                    <article className="d-flex gap-2 align-items-center">{children}</article>
-                </div>
-            </div>
+            <article className="page-overview card" key={card.route}>
+                <div className="card-header d-flex gap-2 align-items-center">{header}</div>
+                <div className="card-body">{body}</div>
+            </article>
         );
     }
 
@@ -83,6 +94,10 @@ export namespace Overview {
         return <Anchor href={route} key="title" className={className} children={title} />;
     }
 
+    function m_tags(tags: string[] = []) {
+        return Array.from(new Set(tags)).map((tag) => <Badge key={tag}>{tag}</Badge>);
+    }
+
     /**
      * Constructs reading time details.
      * @param reading               Reading time.
@@ -92,13 +107,9 @@ export namespace Overview {
         // ignore if we have no reading details
         if (typeof reading === 'undefined') return null;
 
-        // build the underlying class-name to be used
-        let className = date ? 'd-flex' : 'd-none d-sm-flex';
-        className = clsx(className, 'align-items-center ms-4');
-
         // construct the resulting item now
         return (
-            <span key="reading-time" className={className}>
+            <span key="reading-time" className="d-flex align-items-center">
                 <ClockIcon size="18" />
                 &nbsp;
                 {reading.text}
@@ -115,10 +126,6 @@ export namespace Overview {
         // ignore if we have no repository backing
         if (typeof repo === 'undefined') return null;
 
-        // build the underlying class-name to be used
-        let className = date ? 'd-flex' : 'd-none d-sm-flex';
-        className = clsx(className, 'align-items-center gap-1 ms-4 z-1');
-
         // prepare the href to be used
         const href = `${Brand.GitHub.URL()}/${repo}`;
 
@@ -126,6 +133,6 @@ export namespace Overview {
         const children = [<span key="label">GitHub</span>, <ArrowUpRightIcon key="icon" />];
 
         // construct the resulting item now
-        return <Button key="repo" href={href} className={className} children={children} />;
+        return <Button key="repo" href={href} className="z-1" children={children} />;
     }
 }

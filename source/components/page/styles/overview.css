@@ -1,5 +1,5 @@
 /*----------  Subtitle Styling  ----------*/
 
-.page-overview:hover {
+.page-overview:hover .card-header {
     color: hsla(var(--bs-link-hover-color-hsl), var(--bs-link-opacity, 1));
 }
