@@ -1,11 +1,11 @@
-/// Bootstrap Modules
-import './source/bootstrap';
-
 /// Vendor Modules
 import * as nextra from 'nextra';
 
 /** Prepare the layers to be used. */
 let configuration = nextra.default({ readingTime: true });
+
+/** Prepare all the available aliases. */
+const aliases = { 'next-mdx-import-source-file': './markdown/index.tsx' };
 
 /** Expose the underlying configuration. */
 export default configuration({
@@ -13,9 +13,5 @@ export default configuration({
     reactStrictMode: true,
     images: { unoptimized: true },
     basePath: process.env.PAGES_BASE_PATH,
-    turbopack: {
-        resolveAlias: {
-            'next-mdx-import-source-file': './markdown/index.tsx',
-        },
-    },
+    turbopack: { resolveAlias: aliases },
 });
