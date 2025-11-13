@@ -15,7 +15,7 @@ As such I decided to go down the rabbit-hole constructing one myself and seeing 
 
 <h4 className="mt-4">Glob Matching</h4>
 
-Before worrying about recursing over directories and improving performance, I looked around for an already performant glob matching implementation. This is where I came across [`oxc-project/fast-glob`](https://github.com/oxc-project/fast-glob), which does just that. This would allow me to use the following to match a path against a glob:
+Before worrying about recursing over directories and improving performance, I looked around for an already performant glob matching implementation. This is when I came across [`oxc-project/fast-glob`](https://github.com/oxc-project/fast-glob), which does just that. This would allow me to use the following to match a path against a glob:
 
 ```cpp
 // a complex glob that requires the matching algorithm
@@ -38,7 +38,7 @@ Now although a fast glob matching algorithm is great for testing against a small
 ls **/*.ts # lists all ".ts" files recursively within a directory
 ```
 
-It would list many files, but would also take a long time to test every file-path using the algorithm that [`oxc-project/fast-glob`](https://github.com/oxc-project/fast-glob) provides. We could instead optimize our search by only checking for the extension `.ts` of files. Additionally, suppose we searched through an explicit source directory such that we instead had `source/**/*.ts` as our glob pattern. We could narrow our search by appending the prefix to the working directory. This tells us that the pattern components could be used for optimizations.
+It would list many, many files, but it would also take a long time to test every file-path using the algorithm that [`oxc-project/fast-glob`](https://github.com/oxc-project/fast-glob) provides. We could instead optimize our search by only checking for the extension `.ts` of files. Additionally, suppose we were required to search through an explicit source directory such that we instead had `source/**/*.ts` as our glob pattern. We could narrow our search by appending the prefix to the working directory. This tells us that the pattern components could be used for optimizations.
 
 Take the glob pattern `some/prefix/**/*.md` as our example. It is comprised of a prefix `some/prefix`, a recursive match `**/*` and a suffix `.md`. By parsing these components, we can bake in optimizations to an eventual globbing iterator.
 
