@@ -12,6 +12,7 @@ import {
     FileCppIcon,
     FileJsIcon,
     FileTsIcon,
+    HardHatIcon,
     SwordIcon,
     TerminalIcon,
 } from '@phosphor-icons/react/dist/ssr';
@@ -114,8 +115,12 @@ export namespace Code {
             case 'typescript':
                 return ['TypeScript', FileTsIcon];
 
+            case 'tal':
             case 'talos':
                 return ['Talos', SwordIcon];
+
+            case 'zig':
+                return ['Zig', HardHatIcon];
         }
     }
 }

@@ -1,0 +1,147 @@
+---
+title: Colorless Functions
+date: 2025-11-12
+href: https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/
+description: My take on implementing async/await without function colors.
+tags: [Talos, Languages, Concurrency]
+---
+
+With the release (or re-release) of [Zig's New Async I/O](https://github.com/ziglang/zig/pull/25592), I wanted to throw my hat in the ring with Talos attempt at colorless functions for it's concurrency model.
+
+<h4 className="mt-4">Recapping Async/Await</h4>
+
+> Function coloring stems from the language syntax that then describes to the runtime how a function should be executed. Functions of a particular color may then only be called from a function of the same color.
+
+There have been some excellent posts that go into more detail that I strongly recommend:
+
+-   [Futures Aren't Ersatz Threads](https://monkey.org/~marius/futures-arent-ersatz-threads.html) by _Marius Eriksen_ <span className="text-secondary">(April 2, 2013)</span>
+-   [What Color is Your Function?](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/) by _Bob Nystrom_ <span className="text-secondary">(February 1, 2015)</span>
+-   [What is Zig's "Colorblind" Async/Await](https://kristoff.it/blog/zig-colorblind-async-await/) by _Loris Cro_ <span className="text-secondary">(June 21, 2020)</span>
+-   [Let Futures be Futures](https://without.boats/blog/let-futures-be-futures/) by _Without Boats_ <span className="text-secondary">(February 3, 2024)</span>
+
+All of these posts explain in varying yet strikingly similar terms how the asynchronous calling conventions for certain languages _\*cough\* JavaScript \*cough\*_, resulting in an upwards poisoning effect where parent functions are also forced to be asynchronous. An examples of this can be found as:
+
+```js
+function blue() { await red(); /** an error would occur here */ }
+async function red() { blue(); await red(); /** both valid calls */ }
+```
+
+This is similar to Zig's previous model of concurrency described by Without Boats, which expressed coroutines with async/await but did not require the `async` declaration for functions.
+
+```zig
+const net = @import("std").net;
+
+// The original, special declaration to enable evented I/O.
+pub const io_mode = .evented;
+
+pub fn main() !void {
+    const addr = try net.Address.parseIp("127.0.0.1", 7000);
+    var sendFrame = async send_message(addr);
+    try await sendFrame; // And await the message
+}
+
+// Note how the function definition doesn't require the `async` marking.
+fn send_message(addr: net.Address) !void {
+    var socket = try net.tcpConnectToAddress(addr);
+    defer socket.close(); // Defer the close handler.
+    _ = try await async socket.write("Hello World!\n");
+}
+```
+
+<h4 className="mt-4">Inversion of Concurrency</h4>
+
+Eventually, Zig decided to [remove the async/await keywords](https://github.com/ziglang/zig/commit/abfed1708862716b7b54ce8ea349ce7215a9fab4) and move towards a userland model instead. This led to the introduction of a new interface that would handle all asynchronous execution. This led to the following calling convention for coroutines in Zig:
+
+```zig
+const std = @import("std");
+
+// Some long-running task that.
+fn task(io: std.Io, data: []const u8) !void {
+    std.debug.print("Hello, {s}!\n", .{data});
+}
+
+// Handles executing multiple tasks.
+fn execute(io: std.Io) !void {
+    var a = io.async(task, .{"Future A"});
+    var b = io.async(task, .{"Future B"});
+
+    try a.await(io);
+    try b.await(io);
+}
+```
+
+> For a more detailed overview of Zig's new async I/O, Loris Cro has a [secondary post](https://kristoff.it/blog/zig-new-async-io/) doing so.
+
+The change from using `await` as a keyword to instead being a method the `Future` struct contains, effectively inverts the previous calling conventions. This is possible as all `await` calls are effectively blocking for the scope of a function. This removal has a few benefits, such as allowing _all_ functions to possible be called asynchronously regardless of declaration, user-defined scheduling based on the runtime dependency, and improving method-chaining for nested properties.
+
+```js
+// Some awaitable structure the is generated.
+const promise = new Promise(...);
+
+// With the `old` calling convention:
+(await promise).property();
+
+// With Zigs `new` calling convention:
+promise.await().property();
+```
+
+However these benefits come at one major cost to use, the dependency on `std.Io` for execution. In their attempt to remove function coloring, Zig has come full-circle and reinvented the wheel as all asynchronous functions now require a runtime structure to emulate the removed `await` call.
+
+In allow `await` method calls to occur in any context, `async` calls will instead only be callable with a runtime available. This could be circumvented by using a global variable for the runtime, however the [evilness](https://www.forrestthewoods.com/blog/global-variables-are-evil-and-unsafe/) of such an action has been extensively discussed.
+
+<h4 className="mt-4">Unconventional Conventions</h4>
+
+With all things considered, solving colorless functions appears to be a daunting problem. However, perhaps using a mix of conventions could be the solution.
+
+<h5 className="mt-3">Awaiting Futures</h5>
+
+Let's start our design using [Talos](/projects/talos) and keep Zig's `Future` object so that `future.await(){:zig}` is still valid. This would allow us to `.await` on any `Future` or awaitable object that is created.
+
+For the creation of futures, we could use a global variable for launching asynchronous functions to circumvent the runtime dependency that Zig contains.
+
+```talos
+// Some long-running task callback.
+let callback = fn { ... };
+
+// Launch a task with `...` arguments.
+let future = Future.async(callback, ...);
+
+// And then await for the result from anywhere.
+let result = future.await();
+```
+
+Although this does exhibit the aforementioned evil global variable, since Talos implements concurrency internally with green threads (eg: userland cannot modify scheduling), this is a perfectly acceptable solution.
+
+But can we improve on this and allow for multiple runtime targets?
+
+<h5 className="mt-3">Deferring Futures</h5>
+
+We could take Zig's original syntax for launching coroutines by using the `async callback(...){:zig}` syntax. However this exhibits the same readability issues with the `(await future).property(){:zig}` style. So let's instead apply the `async` operator as an infix instead of a prefix. This would give us the following syntax:
+
+```talos
+// Possible inversion of the `async` operator.
+let future = callback async(...);
+
+// Alternatively any operator sigil could be used.
+let other = callback::(...);
+
+// This allows us to keep our clean method-chaining.
+callback async().await().property();
+callback::().await().property();
+```
+
+This also _could_ allow us to bind alternate runtimes if this capability is possible in the underlying language.
+
+```talos
+// Potential runtime mixin for `async` operators.
+let future = callback async[runtime](...);
+
+// Alternative runtime mixing for a sigil operator.
+let other = callback:runtime:(...);
+```
+
+> **Note:** Currently Talos uses the `Future.async` static method to launch asynchronous execution. Eventually I would like to expand on this with the above syntax, but like any other programming language architect, I think there is still some room for improvement with the syntax (at least with readability).
+
+<h4 className="mt-4">Joining Threads</h4>
+
+Quite clearly, these speculations for potential async/await syntax exceed what a normal programming language would normally exhibit. However I think that inverting the normal conventions as Zig has done will lead to a language with truly colorblind functions. As such, moving asynchronous execution to function calls instead of their declarations could lead to the final thread to finish the concurrency tapestry.

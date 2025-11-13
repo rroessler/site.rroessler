@@ -1,10 +1,13 @@
 /// Vendor Modules
 import { importPage } from 'nextra/pages';
+import { $NextraMetadata, EvaluateResult } from 'nextra';
+
+/// Package Modules
+import { Blog } from '@/components';
 
 /// Website Modules
 import { Static } from './static';
 import { Metadata } from './metadata';
-import { EvaluateResult } from 'nextra';
 
 /** Dynamic Router Page. */
 export class Content {
@@ -60,8 +63,13 @@ export class Content {
     private async m_view(props: Metadata.Props) {
         const params = await props.params;
         const segments = await this.m_segments(props.params);
-        const { default: Content } = await this.m_import(segments);
-        return <Content {...props} params={params}></Content>;
+        const { default: Content, metadata } = await this.m_import(segments);
+
+        const header = this.m_header(params, metadata); // prepare details
+        const content = <Content key="content" {...props} params={params} />;
+
+        // and return the resulting view items now
+        return [header, content];
     }
 
     /**
@@ -70,6 +78,17 @@ export class Content {
      */
     private async m_import(segments: string[]): Promise<EvaluateResult> {
         return importPage(segments); // and load the content now as needed
+    }
+
+    /**
+     * Constructs a header.
+     * @param params            Metadata parameters.
+     * @param metadata          Header properties.
+     */
+    private m_header(params: Awaited<Metadata.Params>, metadata: $NextraMetadata) {
+        const segments = params[this.m_slug]; // prepare the base
+        const requires = segments.length > 1 && segments[0] === 'posts';
+        return requires && <Blog.Header key="header" {...metadata} />;
     }
 
     /**
