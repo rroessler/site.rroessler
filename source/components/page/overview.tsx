@@ -94,8 +94,14 @@ export namespace Overview {
         return <Anchor href={route} key="title" className={className} children={title} />;
     }
 
+    /**
+     * Constructs the view tags.
+     * @param tags              Tags to show.
+     */
     function m_tags(tags: string[] = []) {
-        return Array.from(new Set(tags)).map((tag) => <Badge key={tag}>{tag}</Badge>);
+        return Array.from(new Set(tags)).map((tag, ii) => (
+            <Badge key={tag} className={ii > 0 ? 'd-none d-sm-inline-block' : undefined} children={tag} />
+        ));
     }
 
     /**
