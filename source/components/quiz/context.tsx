@@ -9,7 +9,7 @@ import { Answers } from './answers';
 /** Contextual Support. */
 export interface Context {
     readonly outer: boolean;
-    readonly answers: Answers;
+    readonly answers?: Answers;
 
     clear(): void;
     resolve(deployment: Date): Answers;

@@ -5,8 +5,11 @@
     "name": "rroessler",
     "version": "0.0.2",
     "scripts": {
+        "//  START  //": "",
         "start": "next dev ./source --turbopack",
-        "bundle": "next build ./source --turbopack"
+        "//  BUNDLE  //": "",
+        "bundle": "next build ./source --turbopack",
+        "bundle:lint": "tsc --noEmit"
     },
     "dependencies": {
         "@phosphor-icons/core": "^2.1.1",

@@ -33,7 +33,7 @@ export function Loader() {
     if (typeof data === 'undefined') return title;
 
     // determine how many correct answers we have
-    const correct = context.answers[1].match(/1/g)?.length ?? 0;
+    const correct = context.answers?.[1].match(/1/g)?.length ?? 0;
     const results = `Result: ${correct} / ${data.questions.length}`;
 
     // prepare the listing for clearing the current answers
