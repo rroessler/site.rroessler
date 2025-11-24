@@ -37,6 +37,6 @@ export namespace Persistent {
         <T>(key: string, initial?: T | (() => T)) =>
         () => {
             if (typeof initial === 'function') initial = (<any>initial)();
-            return Local.get<T>(key) ?? Local.set(key, initial); // resolve
+            return Local.get<T>(key) ?? Local.set(key, initial);
         };
 }

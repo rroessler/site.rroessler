@@ -1,0 +1,10 @@
+/*----------  Actions Styling  ----------*/
+
+.quiz-actions {
+    top: 64px;
+    position: sticky;
+    z-index: 10;
+
+    background-color: hsla(var(--bs-body-bg-hsl), var(--bs-bg-opacity));
+    border-bottom: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+}

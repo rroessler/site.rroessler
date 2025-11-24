@@ -22,7 +22,7 @@ export namespace Local {
      * @param value                 Value to set.
      */
     export const set = <T>(key: string, value: T) =>
-        value == undefined ? m_container?.removeItem(key) : m_container?.setItem(key, JSON.stringify(value));
+        typeof value === 'undefined' ? m_container?.removeItem(key) : m_container?.setItem(key, JSON.stringify(value));
 
     /**
      * Gets a value from storage.

@@ -1,0 +1,64 @@
+'use client';
+
+/// CSS Modules
+import './styles/actions.css';
+
+/// Vendor Modules
+import useSWR from 'swr';
+import { TW50 } from 'weekly-fifty';
+
+/// Website Modules
+import { Page } from '../page';
+import { Answers } from './answers';
+import { Context } from './context';
+import { Question } from './question';
+import { Button } from '../button';
+
+/** Quiz Data Loader. */
+export interface Loader {}
+export function Loader() {
+    // resolve the current answers as well
+    const context = Context.Use();
+
+    // prepare the "swr" handler to be used as well
+    const { data } = useSWR(TW50.URL.Latest(), (url) => TW50.Fetch({ url }));
+
+    // prepare a suitable deployment date to be shown
+    const deployment = data?.deployment?.toLocaleDateString('en-AU') ?? '##/##/####';
+
+    // prepare the title to be shown now
+    const title = <Page.Subtitle key="title" children={`Quiz ${data?.id ?? '#'} - ${deployment}`} />;
+
+    // stop if the incoming data has not yet been loaded
+    if (typeof data === 'undefined') return title;
+
+    // determine how many correct answers we have
+    const correct = context.answers[1].match(/1/g)?.length ?? 0;
+    const results = `Result: ${correct} / ${data.questions.length}`;
+
+    // prepare the listing for clearing the current answers
+    const actions = (
+        <div key="actions" className="quiz-actions py-3 d-flex justify-content-end align-items-center">
+            <h5 className="mb-0 me-auto" children={results} />
+            <Button onClick={() => context.clear()}>Reset</Button>
+        </div>
+    );
+
+    // resolve the currently assigned answers
+    const answers = [...context.resolve(data.deployment)[1]] as Answers.Value[];
+
+    // prepare the questions to be shown now
+    const questions = data.questions.map((question, index) => (
+        <Question key={index.toString()} index={index} value={answers[index]} {...question} />
+    ));
+
+    // and construct the resulting questions to be shown
+    return [title, actions, <div key="quiz" children={questions} />];
+}
+
+export namespace Loader {
+    //  TYPEDEFS  //
+
+    /** Incoming Loader Properties. */
+    export type Props = {};
+}

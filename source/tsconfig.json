@@ -25,7 +25,8 @@
         "**/*.ts",
         "**/*.tsx",
         "app/page.mdx",
-        "app/not-found.mdx"
+        "app/not-found.mdx",
+        "app/quiz/page.mdx"
     ],
     "exclude": ["node_modules"]
 }

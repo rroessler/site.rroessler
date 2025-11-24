@@ -10,5 +10,6 @@ export * from './date';
 export * from './intrinsic';
 export * from './layout';
 export * from './page';
+export * from './quiz';
 export * from './sidebar';
 export * from './theme';
