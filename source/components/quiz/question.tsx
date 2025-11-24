@@ -9,7 +9,6 @@ import { TW50 } from 'weekly-fifty';
 import { Answers } from './answers';
 import { Context } from './context';
 import { Button } from '../button';
-import { Variant } from '../intrinsic';
 
 /** Constructs a current question. */
 export interface Question extends Question.Props {}
@@ -27,7 +26,7 @@ export function Question({ index, value, title, answer }: Question) {
     const onInvalid = () => context.update(index, Answers.Value.INVALID);
 
     // prepare the variant to be constructed
-    const variant = { [Answers.Value.CORRECT]: 'success', [Answers.Value.INVALID]: 'danger' }[value];
+    const variant = { [Answers.Value.CORRECT]: 'success', [Answers.Value.INVALID]: 'danger' }[value] ?? 'primary';
 
     // prepare the buttons to be used now
     const correct = <Button key="correct" variant="success" onClick={onCorrect} children={'Correct'} />;
@@ -36,15 +35,15 @@ export function Question({ index, value, title, answer }: Question) {
     // prepare the button group to be used now
     const group = (
         <>
-            <Button.Group className={`me-auto ${visible ? '' : 'd-none'}`} children={[[correct, invalid]]} />
-            <Button variant={variant} onClick={() => setVisible(!visible)} children={details} />
+            <Button.Group className={`${visible ? '' : 'd-none'}`} children={[[correct, invalid]]} />
+            <Button variant={variant} className="ms-auto" onClick={() => setVisible(!visible)} children={details} />
         </>
     );
 
     // and construct the necessary answer now
     return (
         <>
-            <h4 className="mt-4 text-center text-sm-start" dangerouslySetInnerHTML={{ __html: title }} />
+            <h4 className="mt-4 text-center text-sm-start fw-medium" dangerouslySetInnerHTML={{ __html: title }} />
             <h5 className={className} dangerouslySetInnerHTML={{ __html: answer }} />
             <div className="d-flex justify-content-center" children={group} />
         </>

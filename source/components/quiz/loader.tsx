@@ -9,10 +9,11 @@ import { TW50 } from 'weekly-fifty';
 
 /// Website Modules
 import { Page } from '../page';
+import { Button } from '../button';
 import { Answers } from './answers';
 import { Context } from './context';
 import { Question } from './question';
-import { Button } from '../button';
+import { Placeholder } from './placeholder';
 
 /** Quiz Data Loader. */
 export interface Loader {}
@@ -26,15 +27,13 @@ export function Loader() {
     // prepare a suitable deployment date to be shown
     const deployment = data?.deployment?.toLocaleDateString('en-AU') ?? '##/##/####';
 
-    // prepare the title to be shown now
+    const loaded = typeof data === 'object'; // check if the data has been loaded
     const title = <Page.Subtitle key="title" children={`Quiz ${data?.id ?? '#'} - ${deployment}`} />;
-
-    // stop if the incoming data has not yet been loaded
-    if (typeof data === 'undefined') return title;
+    const placeholders = loaded ? undefined : [...new Array(10)].map((_, index) => <Placeholder key={index} />);
 
     // determine how many correct answers we have
-    const correct = context.answers?.[1].match(/1/g)?.length ?? 0;
-    const results = `Result: ${correct} / ${data.questions.length}`;
+    const correct = data ? context.answers?.[1].match(/1/g)?.length ?? 0 : '##';
+    const results = `Result: ${correct} / ${data?.questions.length ?? '##'}`;
 
     // prepare the listing for clearing the current answers
     const actions = (
@@ -44,12 +43,15 @@ export function Loader() {
         </div>
     );
 
+    // stop if the incoming data has not yet been loaded
+    if (!loaded) return [title, actions, <div key="quiz" children={placeholders} />];
+
     // resolve the currently assigned answers
     const answers = [...context.resolve(data.deployment)[1]] as Answers.Value[];
 
     // prepare the questions to be shown now
     const questions = data.questions.map((question, index) => (
-        <Question key={index.toString()} index={index} value={answers[index]} {...question} />
+        <Question key={index} index={index} value={answers[index]} {...question} />
     ));
 
     // and construct the resulting questions to be shown
