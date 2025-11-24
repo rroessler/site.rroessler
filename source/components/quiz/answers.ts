@@ -38,10 +38,9 @@ export namespace Answers {
      * @param answers               Current answers.
      * @param setter                Setter for context.
      */
-    export const subscribe = (answers: Answers, setter: (value: Answers) => void): Context => ({
+    export const subscribe = (setter: (value: Answers) => void, answers: Answers = unset()): Context => ({
         answers,
         outer: false,
-
         clear: () => setter(unset()),
         resolve: (deployment) => (answers[0] < deployment ? unset() : answers),
         update: (index, state) => {
