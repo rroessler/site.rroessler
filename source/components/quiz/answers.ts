@@ -32,21 +32,4 @@ export namespace Answers {
 
     /** Gets the current answers to be used. */
     export const resolve = (): Answers => Storage.Local.get<Answers>(storage) ?? unset();
-
-    /**
-     * Handles subscribing context values.
-     * @param answers               Current answers.
-     * @param setter                Setter for context.
-     */
-    export const subscribe = (setter: (value: Answers) => void, answers: Answers = unset()): Context => ({
-        answers,
-        outer: false,
-        clear: () => setter(unset()),
-        resolve: (deployment) => (answers[0] < deployment ? unset() : answers),
-        update: (index, state) => {
-            const values = [...answers[1]];
-            values[index] = state; // update and set now
-            setter([new Date(), values.join('') as State]);
-        },
-    });
 }

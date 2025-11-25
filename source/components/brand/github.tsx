@@ -9,9 +9,9 @@ import { Button } from '../button';
 
 /** GitHub Component. */
 export interface GitHub extends GitHub.Props {}
-export function GitHub({ className, href, target, ...props }: GitHub) {
+export function GitHub({ href, ...props }: GitHub) {
     return (
-        <Button.Icon square href={GitHub.URL(href)} target={target ?? '_blank'} className={className} {...props}>
+        <Button.Icon square href={GitHub.URL(href)} {...props}>
             <GithubLogoIcon size="18" />
         </Button.Icon>
     );

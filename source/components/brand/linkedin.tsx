@@ -9,11 +9,10 @@ import { Button } from '../button';
 
 /** LinkedIn Component. */
 export interface LinkedIn extends LinkedIn.Props {}
-export function LinkedIn({ className, href, target, children, ...props }: LinkedIn) {
+export function LinkedIn({ href, ...props }: LinkedIn) {
     return (
-        <Button.Icon square href={LinkedIn.URL(href)} target={target ?? '_blank'} className={className} {...props}>
+        <Button.Icon square href={LinkedIn.URL(href)} {...props}>
             <LinkedinLogoIcon size="18" />
-            {children}
         </Button.Icon>
     );
 }
@@ -22,7 +21,7 @@ export namespace LinkedIn {
     //  TYPEDEFS  //
 
     /** LinkedIn Component Properties. */
-    export type Props = Button.Anchor;
+    export type Props = Omit<Button.Anchor, 'children'>;
 
     //  PROPERTIES  //
 

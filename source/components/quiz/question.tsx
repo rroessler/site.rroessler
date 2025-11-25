@@ -12,14 +12,16 @@ import { Button } from '../button';
 
 /** Constructs a current question. */
 export interface Question extends Question.Props {}
-export function Question({ index, value, title, answer }: Question) {
+export function Question({ index, value, visible, title, answer }: Question) {
     // get the current context to be used
     const context = Context.Use();
 
-    // prepare a suitably view-answer handler
-    const [visible, setVisible] = React.useState(false);
+    // determine the current visibility to be used now
+    const setVisibility = () => context[visible ? 'hide' : 'show'](index);
+
+    // prepare the details to be shown for the answer now
     const className = clsx('fw-normal d-flex flex-column align-items-center', visible || 'd-none');
-    const details = `${visible ? 'Hide' : 'Show'} Answer`;
+    const details = `${visible ? 'Hide' : 'Show'} Answer`; // prepare the answer details
 
     // prepare the update callback to be used
     const onCorrect = () => context.update(index, Answers.Value.CORRECT);
@@ -36,7 +38,7 @@ export function Question({ index, value, title, answer }: Question) {
     const group = (
         <>
             <Button.Group className={`${visible ? '' : 'd-none'}`} children={[[correct, invalid]]} />
-            <Button variant={variant} className="ms-auto" onClick={() => setVisible(!visible)} children={details} />
+            <Button variant={variant} className="ms-auto" onClick={setVisibility} children={details} />
         </>
     );
 
@@ -55,6 +57,7 @@ export namespace Question {
 
     export type Props = TW50.Question & {
         readonly index: number;
+        readonly visible: boolean;
         readonly value: Answers.Value;
     };
 }

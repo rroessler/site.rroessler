@@ -5,6 +5,7 @@ import { PageMapItem } from 'nextra';
 import { Product } from '@/product';
 
 /// Website Modules
+import { Quiz } from '../quiz';
 import { Title } from './title';
 import { Brand } from '../brand';
 import { Theme } from '../theme';
@@ -30,6 +31,10 @@ export function Header({ pages }: Header) {
                 <Button.Group className="d-none d-sm-inline-flex">
                     <Brand.GitHub />
                     <Brand.LinkedIn />
+                </Button.Group>
+
+                <Button.Group>
+                    <Quiz.Toggle />
                 </Button.Group>
             </div>
         </nav>

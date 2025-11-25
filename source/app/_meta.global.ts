@@ -14,9 +14,9 @@ const PROJECTS: MetaRecord = {
 export default {
     index: { type: 'page', title: 'Home', display: 'hidden' },
 
-    quiz: { type: 'page' },
     about: { type: 'page' },
     resources: { type: 'page' },
+    quiz: { type: 'page', display: 'hidden' },
 
     posts: { type: 'page', title: 'Blog' },
     projects: { type: 'page', items: PROJECTS },
