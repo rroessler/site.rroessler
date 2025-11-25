@@ -3,7 +3,7 @@
     "license": "MIT",
     "type": "module",
     "name": "rroessler",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "scripts": {
         "//  START  //": "",
         "start": "next dev ./source --turbopack",
