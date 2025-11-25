@@ -2,7 +2,7 @@
 import * as nextra from 'nextra';
 
 /** Prepare the layers to be used. */
-let configuration = nextra.default({ readingTime: true });
+const configuration = nextra.default({ readingTime: true });
 
 /** Prepare all the available aliases. */
 const aliases = { 'next-mdx-import-source-file': './markdown/index.tsx' };
