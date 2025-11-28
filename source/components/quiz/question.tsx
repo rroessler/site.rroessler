@@ -12,7 +12,7 @@ import { Button } from '../button';
 
 /** Constructs a current question. */
 export interface Question extends Question.Props {}
-export function Question({ index, value, visible, title, answer }: Question) {
+export function Question({ index, value, visible, title, deployment, answer }: Question) {
     // get the current context to be used
     const context = Context.Use();
 
@@ -24,8 +24,8 @@ export function Question({ index, value, visible, title, answer }: Question) {
     const details = `${visible ? 'Hide' : 'Show'} Answer`; // prepare the answer details
 
     // prepare the update callback to be used
-    const onCorrect = () => context.update(index, Answers.Value.CORRECT);
-    const onInvalid = () => context.update(index, Answers.Value.INVALID);
+    const onCorrect = () => context.update(index, Answers.Value.CORRECT, deployment);
+    const onInvalid = () => context.update(index, Answers.Value.INVALID, deployment);
 
     // prepare the variant to be constructed
     const variant = { [Answers.Value.CORRECT]: 'success', [Answers.Value.INVALID]: 'danger' }[value] ?? 'primary';
@@ -58,6 +58,7 @@ export namespace Question {
     export type Props = TW50.Question & {
         readonly index: number;
         readonly visible: boolean;
+        readonly deployment: Date;
         readonly value: Answers.Value;
     };
 }

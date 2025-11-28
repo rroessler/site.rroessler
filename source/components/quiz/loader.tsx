@@ -55,7 +55,7 @@ export function Loader() {
         // prepare the details to be used
         const value = answers[index];
         const visible = context.visibility[index];
-        const options = { value, visible, ...question };
+        const options = { value, visible, deployment: data.deployment, ...question };
 
         // and construct the resulting question now
         return <Question key={index} index={index} {...options} />;

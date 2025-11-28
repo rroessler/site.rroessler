@@ -16,7 +16,7 @@ export interface Context {
     hide(index?: number): void;
     show(index?: number): void;
     resolve(deployment: Date): Answers;
-    update(index: number, state: Answers.Value): void;
+    update(index: number, state: Answers.Value, deployment?: Date): void;
 }
 
 export namespace Context {

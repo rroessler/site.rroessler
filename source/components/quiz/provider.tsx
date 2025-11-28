@@ -43,9 +43,10 @@ export function Provider({}: Provider) {
         show: (index) => toggleVisibility(true, index),
         clear: () => (setAnswers(Answers.unset()), toggleVisibility(false)),
         resolve: (deployment) => (answers[0] < deployment ? Answers.unset() : answers),
-        update: (index, state) => {
-            const values = [...answers[1]];
-            values[index] = state; // update and set now
+        update: (index, state, deployment = new Date(0)) => {
+            const reset = answers[0] < deployment; // check for a reset
+            const values = [...(reset ? Answers.unset()[1] : answers[1])];
+            values[index] = state; // update and set now as necessary
             setAnswers([new Date(), values.join('') as Answers.State]);
         },
     };
