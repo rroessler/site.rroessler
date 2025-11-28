@@ -31,5 +31,7 @@ export namespace Answers {
     export const unset = (): Answers => [new Date(0), '2'.repeat(50) as State];
 
     /** Gets the current answers to be used. */
-    export const resolve = (): Answers => Storage.Local.get<Answers>(storage) ?? unset();
+    export const resolve = (encoded: Answers = Storage.Local.get<Answers>(storage) ?? unset()): Answers => {
+        return [new Date(encoded[0]), encoded[1]]; // and ensure we parse the date now
+    };
 }

@@ -28,7 +28,7 @@ export function Provider({}: Provider) {
 
     // update the context with a suitable mode handler
     const hooks = Storage.Persistent.Use(Context.Storage(), Answers.unset());
-    const [answers, setAnswers] = [hooks[0] ?? Answers.unset(), hooks[1]];
+    const [answers, setAnswers] = [Answers.resolve(hooks[0]), hooks[1]];
 
     // ensure not calling recursively at all here
     if (!context.outer) return null;
