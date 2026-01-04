@@ -27,13 +27,16 @@ export function Loader() {
     // prepare a suitable deployment date to be shown
     const deployment = data?.deployment?.toLocaleDateString('en-AU') ?? '##/##/####';
 
+    // resolve the currently assigned answers
+    const answers = data ? ([...context.resolve(data.deployment)[1]] as Answers.Value[]) : undefined;
+
     const loaded = typeof data === 'object'; // check if the data has been loaded
     const title = <Page.Subtitle key="title" children={`Quiz ${data?.id ?? '#'} - ${deployment}`} />;
     const placeholders = loaded ? undefined : [...new Array(10)].map((_, index) => <Placeholder key={index} />);
 
     // determine how many correct answers we have
-    const answered = data ? context.answers?.[1].match(/[01]/g)?.length ?? 0 : '##';
-    const correct = data ? context.answers?.[1].match(/1/g)?.length ?? 0 : '##';
+    const answered = data ? answers?.filter((value) => value !== '2')?.length ?? 0 : '##';
+    const correct = data ? answers?.filter((value) => value === '1')?.length ?? 0 : '##';
     const results = `Results: ${correct} / ${data?.questions.length ?? '##'} (${answered})`;
 
     // prepare the listing for clearing the current answers
@@ -46,10 +49,7 @@ export function Loader() {
     );
 
     // stop if the incoming data has not yet been loaded
-    if (!loaded) return [title, actions, <div key="quiz" children={placeholders} />];
-
-    // resolve the currently assigned answers
-    const answers = [...context.resolve(data.deployment)[1]] as Answers.Value[];
+    if (!loaded || typeof answers === 'undefined') return [title, actions, <div key="quiz" children={placeholders} />];
 
     // prepare the questions to be shown now
     const questions = data.questions.map((question, index) => {

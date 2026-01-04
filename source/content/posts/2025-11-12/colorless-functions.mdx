@@ -1,6 +1,6 @@
 ---
-title: Colorless Functions
 date: 2025-11-12
+title: Colorless Functions
 href: https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/
 description: My take on implementing async/await without function colors.
 tags: [Talos, Languages, Concurrency]
@@ -121,11 +121,11 @@ We could take Zig's original syntax for starting coroutines by using the `async 
 let future = callback async(...);
 
 // Alternatively any operator sigil could be used
-let other = callback::(...);
+let other = callback:(...);
 
 // This allows us to keep our clean method-chaining
 callback async().await().property();
-callback::().await().property();
+callback:().await().property();
 ```
 
 This _could_ allow us to bind alternate runtimes if this capability is possible in the underlying language. Alongside this, we can simply remove the `async` operator or the sigil operator (if used), to change back to a blocking non-concurrent function call.
@@ -135,7 +135,7 @@ This _could_ allow us to bind alternate runtimes if this capability is possible 
 let future = callback async[runtime](...);
 
 // Alternative runtime mixing for a sigil operator
-let other = callback:runtime:(...);
+let other = callback:runtime(...);
 ```
 
 > **Note:** Currently Talos uses the `Future.async` static method to launch asynchronous execution. Eventually I would like to expand on this with the above syntax, but like any other programming language architect, I think there is still some room for improvement with the syntax (at least with readability, but this may stem from how unconventional this syntax is).

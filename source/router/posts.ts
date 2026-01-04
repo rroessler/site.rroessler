@@ -53,6 +53,6 @@ export namespace Posts {
     export function filter(items: Item[], nested = false) {
         return (nested ? items.flatMap((item) => item.children ?? []) : items)
             .filter((item) => item.name !== 'index')
-            .sort((a, b) => +new Date(b.frontMatter?.timestamp) - +new Date(a.frontMatter?.timestamp));
+            .sort((a, b) => +new Date(b.frontMatter?.date) - +new Date(a.frontMatter?.date));
     }
 }
