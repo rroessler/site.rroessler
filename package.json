@@ -3,7 +3,7 @@
     "license": "MIT",
     "type": "module",
     "name": "rroessler",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "scripts": {
         "//  START  //": "",
         "start": "next dev ./source --turbopack",
@@ -14,27 +14,28 @@
     "dependencies": {
         "@phosphor-icons/core": "^2.1.1",
         "@phosphor-icons/react": "^2.1.10",
-        "@tailwindcss/postcss": "^4.1.16",
+        "@tailwindcss/postcss": "^4.1.18",
         "clsx": "^2.1.1",
         "halfmoon": "^2.0.2",
-        "next": "^16.0.2",
+        "next": "^16.1.3",
         "nextra": "^4.6.0",
         "postcss": "^8.5.6",
-        "react": "^19.2.0",
-        "react-dom": "^19.2.0",
-        "shiki": "^3.15.0",
-        "swr": "^2.3.6",
-        "tailwindcss": "^4.1.16",
-        "weekly-fifty": "^1.0.6",
-        "xmlbuilder2": "^4.0.0"
+        "react": "^19.2.3",
+        "react-dom": "^19.2.3",
+        "shiki": "3.21.0",
+        "swr": "^2.3.8",
+        "tailwindcss": "^4.1.18",
+        "weekly-fifty": "^1.0.7",
+        "xmlbuilder2": "^4.0.3"
     },
     "devDependencies": {
-        "@types/node": "24.9.2",
-        "@types/react": "^19.2.2",
+        "@types/node": "^25.0.9",
+        "@types/react": "^19.2.8",
         "typescript": "^5.9.3"
     },
     "patchedDependencies": {
         "shiki@3.14.0": "patches/shiki@3.14.0.patch",
-        "shiki@3.15.0": "patches/shiki@3.15.0.patch"
+        "shiki@3.15.0": "patches/shiki@3.15.0.patch",
+        "shiki@3.21.0": "patches/shiki@3.21.0.patch"
     }
 }

@@ -35,8 +35,8 @@ export function Loader() {
     const placeholders = loaded ? undefined : [...new Array(10)].map((_, index) => <Placeholder key={index} />);
 
     // determine how many correct answers we have
-    const answered = data ? answers?.filter((value) => value !== '2')?.length ?? 0 : '##';
-    const correct = data ? answers?.filter((value) => value === '1')?.length ?? 0 : '##';
+    const answered = data ? (answers?.filter((value) => value !== '2')?.length ?? 0) : '##';
+    const correct = data ? (answers?.filter((value) => value === '1')?.length ?? 0) : '##';
     const results = `Results: ${correct} / ${data?.questions.length ?? '##'} (${answered})`;
 
     // prepare the listing for clearing the current answers

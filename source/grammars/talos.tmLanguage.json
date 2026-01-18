@@ -3,68 +3,146 @@
     "displayName": "Talos",
     "scopeName": "source.tal",
     "patterns": [
-        { "include": "#comments" },
-        { "include": "#punctuation" },
-        { "include": "#directives" },
-        { "include": "#declarations" },
-        { "include": "#statements" },
-        { "include": "#expressions" }
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#punctuation"
+        },
+        {
+            "include": "#directives"
+        },
+        {
+            "include": "#declarations"
+        },
+        {
+            "include": "#statements"
+        },
+        {
+            "include": "#expressions"
+        }
     ],
     "repository": {
         "directives": {
-            "patterns": [{ "include": "#module-directives" }, { "include": "#decorator-directives" }]
+            "patterns": [
+                {
+                    "include": "#module-directives"
+                },
+                {
+                    "include": "#decorator-directives"
+                }
+            ]
         },
         "declarations": {
             "patterns": [
-                { "include": "#function-declaration" },
-                { "include": "#enum-declaration" },
-                { "include": "#class-declaration" },
-                { "include": "#storage-modifiers" }
+                {
+                    "include": "#function-declaration"
+                },
+                {
+                    "include": "#enum-declaration"
+                },
+                {
+                    "include": "#class-declaration"
+                },
+                {
+                    "include": "#storage-modifiers"
+                }
             ]
         },
         "statements": {
             "patterns": [
-                { "include": "#loop-statement" },
-                { "include": "#for-statement" },
-                { "include": "#match-statement" },
-                { "include": "#conditional-statement" },
-                { "include": "#return-statement" },
-                { "include": "#control-statement" },
-                { "include": "#exception-statement" }
+                {
+                    "include": "#loop-statement"
+                },
+                {
+                    "include": "#for-statement"
+                },
+                {
+                    "include": "#match-statement"
+                },
+                {
+                    "include": "#conditional-statement"
+                },
+                {
+                    "include": "#return-statement"
+                },
+                {
+                    "include": "#control-statement"
+                },
+                {
+                    "include": "#exception-statement"
+                }
             ]
         },
         "expressions": {
             "patterns": [
-                { "include": "#operators" },
-                { "include": "#literals" },
-                { "include": "#identifiers" },
-                { "include": "#annotations" }
+                {
+                    "include": "#operators"
+                },
+                {
+                    "include": "#literals"
+                },
+                {
+                    "include": "#identifiers"
+                },
+                {
+                    "include": "#annotations"
+                }
             ]
         },
         "punctuation": {
             "patterns": [
-                { "include": "#end-of-expression" },
-                { "include": "#punctuation-comma" },
-                { "include": "#punctuation-accessor" },
-                { "include": "#punctuation-arrow" },
-                { "include": "#punctuation-separator" }
+                {
+                    "include": "#end-of-expression"
+                },
+                {
+                    "include": "#punctuation-comma"
+                },
+                {
+                    "include": "#punctuation-accessor"
+                },
+                {
+                    "include": "#punctuation-separator"
+                },
+                {
+                    "include": "#punctuation-arrow-bold"
+                },
+                {
+                    "include": "#punctuation-arrow-thin"
+                }
             ]
         },
         "literals": {
             "patterns": [
-                { "include": "#void-literal" },
-                { "include": "#boolean-literal" },
-                { "include": "#numeric-literal" },
-                { "include": "#string-literal" }
+                {
+                    "include": "#void-literal"
+                },
+                {
+                    "include": "#boolean-literal"
+                },
+                {
+                    "include": "#numeric-literal"
+                },
+                {
+                    "include": "#string-literal"
+                }
             ]
         },
         "module-directives": {
             "match": "(?<!\\.)\\b(?:(import)|(export)|(namespace)|(as))\\b",
             "captures": {
-                "1": { "name": "keyword.other.import.tal" },
-                "2": { "name": "keyword.other.export.tal" },
-                "3": { "name": "keyword.other.namespace.tal" },
-                "4": { "name": "keyword.other.as.tal" }
+                "1": {
+                    "name": "keyword.other.import.tal"
+                },
+                "2": {
+                    "name": "keyword.other.export.tal"
+                },
+                "3": {
+                    "name": "keyword.other.namespace.tal"
+                },
+                "4": {
+                    "name": "keyword.other.as.tal"
+                }
             }
         },
         "decorator-directives": {
@@ -78,7 +156,9 @@
         "function-declaration": {
             "match": "(?<!\\.)\\b(?:(fn))\\b",
             "captures": {
-                "1": { "name": "storage.type.function.tal" }
+                "1": {
+                    "name": "storage.type.function.tal"
+                }
             }
         },
         "enum-declaration": {
@@ -86,56 +166,85 @@
             "match": "(?<!\\.)\\b(enum)\\b"
         },
         "class-declaration": {
-            "match": "(?<!\\.)\\b(?:(struct)|(class)|(self))\\b",
+            "match": "(?<!\\.)\\b(?:(struct)|(class)|(self)|(implements))\\b",
             "captures": {
-                "1": { "name": "keyword.other.class.tal" },
-                "2": { "name": "keyword.other.class.tal" },
-                "3": { "name": "keyword.other.self.tal" }
+                "1": {
+                    "name": "keyword.other.class.tal"
+                },
+                "2": {
+                    "name": "keyword.other.class.tal"
+                },
+                "3": {
+                    "name": "keyword.other.self.tal"
+                },
+                "4": {
+                    "name": "keyword.other.impl.tal"
+                }
             }
         },
         "return-statement": {
             "match": "(?<!\\.)\\b(?:(return))\\b",
             "captures": {
-                "1": { "name": "keyword.control.flow.return.tal" }
+                "1": {
+                    "name": "keyword.control.flow.return.tal"
+                }
             }
         },
         "control-statement": {
             "match": "(?<!\\.)\\b(?:(break)|(continue)|(panic))\\b",
             "captures": {
-                "1": { "name": "keyword.control.flow.break.tal" },
-                "2": { "name": "keyword.control.flow.continue.tal" },
-                "3": { "name": "keyword.control.flow.panic.tal" }
+                "1": {
+                    "name": "keyword.control.flow.break.tal"
+                },
+                "2": {
+                    "name": "keyword.control.flow.continue.tal"
+                },
+                "3": {
+                    "name": "keyword.control.flow.panic.tal"
+                }
             }
         },
         "conditional-statement": {
             "match": "(?<!\\.)\\b(?:(if)|(else))\\b",
             "captures": {
-                "1": { "name": "keyword.control.conditional.if.tal" },
-                "2": { "name": "keyword.control.conditional.else.tal" }
+                "1": {
+                    "name": "keyword.control.conditional.if.tal"
+                },
+                "2": {
+                    "name": "keyword.control.conditional.else.tal"
+                }
             }
         },
         "loop-statement": {
             "match": "(?<!\\.)\\b(loop)\\b",
             "captures": {
-                "1": { "name": "keyword.control.loop.tal" }
+                "1": {
+                    "name": "keyword.control.loop.tal"
+                }
             }
         },
         "for-statement": {
             "match": "(?<!\\.)\\b(for)\\b",
             "captures": {
-                "1": { "name": "keyword.control.loop.for.tal" }
+                "1": {
+                    "name": "keyword.control.loop.for.tal"
+                }
             }
         },
         "match-statement": {
             "match": "(?<!\\.)\\b(match)\\b",
             "captures": {
-                "1": { "name": "keyword.control.switch.match.tal" }
+                "1": {
+                    "name": "keyword.control.switch.match.tal"
+                }
             }
         },
         "exception-statement": {
             "match": "(?<!\\.)\\b(throw)\\b,",
             "captures": {
-                "1": { "name": "keyword.control.flow.throw.tal" }
+                "1": {
+                    "name": "keyword.control.flow.throw.tal"
+                }
             }
         },
         "operators": {
@@ -183,8 +292,12 @@
                 {
                     "match": "(?<!\\.)\\b(?:(is)|(in))\\b",
                     "captures": {
-                        "1": { "name": "keyword.other.is.tal" },
-                        "2": { "name": "keyword.other.int.tal" }
+                        "1": {
+                            "name": "keyword.other.is.tal"
+                        },
+                        "2": {
+                            "name": "keyword.other.int.tal"
+                        }
                     }
                 }
             ]
@@ -201,9 +314,13 @@
             "name": "punctuation.separator.comma.tal",
             "match": ","
         },
-        "punctuation-arrow": {
-            "name": "keyword.operator.arrow.tal",
+        "punctuation-arrow-thin": {
+            "name": "keyword.operator.arrow_thin.tal",
             "match": "->"
+        },
+        "punctuation-arrow-bold": {
+            "name": "keyword.operator.arrow_bold.tal",
+            "match": "=>"
         },
         "punctuation-separator": {
             "name": "punctuation.separator.colon.tal",
@@ -261,20 +378,34 @@
             }
         },
         "string-literal": {
-            "patterns": [{ "include": "#string-literal-double" }]
+            "patterns": [
+                {
+                    "include": "#string-literal-double"
+                }
+            ]
         },
         "string-literal-double": {
             "name": "string.quoted.double.tal",
             "begin": "(\")",
             "end": "(\")|((?:[\\\\\\n])$)",
             "beginCaptures": {
-                "0": { "name": "punctuation.definition.string.begin.tal" }
+                "0": {
+                    "name": "punctuation.definition.string.begin.tal"
+                }
             },
             "endCaptures": {
-                "1": { "name": "punctuation.definition.string.end.tal" },
-                "2": { "name": "invalid.illegal.newline.tal" }
+                "1": {
+                    "name": "punctuation.definition.string.end.tal"
+                },
+                "2": {
+                    "name": "invalid.illegal.newline.tal"
+                }
             },
-            "patterns": [{ "include": "#string-character-escape" }]
+            "patterns": [
+                {
+                    "include": "#string-character-escape"
+                }
+            ]
         },
         "string-character-escape": {
             "name": "constant.charater.escape.tal",
@@ -285,7 +416,14 @@
             "match": "[_[:alpha:]][_[:alnum:]]*"
         },
         "comments": {
-            "patterns": [{ "include": "#comments-documentation" }, { "include": "#comments-inline" }]
+            "patterns": [
+                {
+                    "include": "#comments-documentation"
+                },
+                {
+                    "include": "#comments-inline"
+                }
+            ]
         },
         "comments-documentation": {
             "name": "comment.block.documentation.talos",
@@ -295,7 +433,9 @@
         "comments-inline": {
             "match": "((//).*)$",
             "captures": {
-                "1": { "name": "comment.line.double-slash.talos" }
+                "1": {
+                    "name": "comment.line.double-slash.talos"
+                }
             }
         }
     }
