@@ -19,14 +19,15 @@ export function Link({ active, header, page, className, style, children, ...prop
 
     // pull out some properties to be used
     const href = page.route;
+    const title = `${page.title}${page.frontMatter?.draft ? ' (Draft)' : ''}`;
 
-    children = React.Children.toArray(children).concat([page.title]); // prepare the children
+    children = React.Children.toArray(children).concat([title]); // prepare the children
     const color = active || pathname === href ? 'var(--bs-sidebar-active-color)' : null;
 
     // prepare the baseline class activeness
     className = clsx('d-flex text-decoration-none', className);
     className = clsx(header ? 'nav-anchor fw-medium' : 'nav-link', className);
-    if (color) (className = clsx('active', className)), (style = { color, ...style });
+    if (color) ((className = clsx('active', className)), (style = { color, ...style }));
 
     // prepare the click-handler to close the sidebar now
     props.onClick ??= () => sidebar.close();

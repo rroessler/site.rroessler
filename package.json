@@ -7,6 +7,7 @@
     "scripts": {
         "//  START  //": "",
         "start": "next dev ./source --turbopack",
+        "serve": "bunx serve -l 3000 ./source/out",
         "//  BUNDLE  //": "",
         "bundle": "next build ./source --turbopack",
         "bundle:lint": "tsc --noEmit"

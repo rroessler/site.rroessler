@@ -1,0 +1,25 @@
+---
+date: 2026-03-06
+title: No Progress
+href: https://no-progress.org/
+description: A programming standard for disabling spinners and progress bars.
+tags: [Talos, Languages]
+---
+
+Whilst I was going through setting up GitHub Workflows for [Talos](https://talos.rroessler.io/), I realized that they are not natively acting like a TTY. Because of this, the use of spinners in my testing framework for Talos resulted in distorted outputs. This led me to implementing a standard similar to [`NO_COLOR`](https://no-color.org/) but instead for spinners and progress bars.
+
+In short:
+
+> Command-line software which adds ANSI spinners and/or progress bars to its output by default should check for a `NO_PROGRESS` environment variable that, when present and not an empty string (regardless of its value), prevents the display of ANSI spinners and/or progress bars.
+
+For those interested, you can find more a more detailed explanation on the [`NO_PROGRESS`](https://no-progress.org/) standard website.
+
+<h4 className="mt-4">Example Usage</h4>
+
+```typescript
+// Access the available environment variable.
+const no_progress = process.env.NO_PROGRESS;
+
+// We only enable spinners and progress bars if "undefined" or explicitly "0".
+const enabled = no_progress === undefined || no_progress === '0';
+```

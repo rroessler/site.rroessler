@@ -1,0 +1,100 @@
+---
+draft: true
+date: 2026-12-31
+title: Type Introspection
+href: https://en.cppreference.com/w/cpp/utility/rtti.html
+description: How I over-engineered dynamic dispatching.
+tags: [C++, Languages, Libraries]
+---
+
+For those familiar with C++, you would have come across the topic of run-time type identification or RTTI for short. This involves deducing types at runtime to _safely_ cast base objects to potential derivatives. The key problem that then occurs is, how can we do this correctly?
+
+<h4 className="mt-4">Casting Natively</h4>
+
+Let's propose an abstract class for which an Instrument could be derived from.
+
+```c++
+// Let's make use of some modern headers.
+#include <print>
+
+struct Instrument {
+    // No undefined behaviour for us!
+    virtual ~Instrument() = default;
+
+    // All instruments should make sound.
+    virtual void play() const {
+        std::println("Unknown sounds!");
+    }
+};
+
+// Who doesn't love listening to a piano...
+struct Piano : public Instrument {
+    void play() const final {
+        std::println("Piano sounds!");
+    }
+};
+
+// Or to the sound of a guitar melody!
+struct Guitar : public Instrument {
+    void play() const final {
+        std::println("Guitar sounds!");
+    }
+};
+```
+
+As expected, upcasting to the base type will always be valid, but downcasting may fail.
+
+```c++
+void foo() {
+    // Starting with a child instance.
+    Piano piano = {};
+
+    // We can safely upcast this to an instrument.
+    Instrument* instrument = &piano;
+
+    // However depending on our downcast, it could fail:
+    Guitar* guitar = dynamic_cast<Guitar*>(instrument);
+    if (guitar == nullptr) std::println("Failed casting!");
+}
+```
+
+However, this method leaves a lot to be desired and does not allow for using a `switch` statement over the internal types.
+
+<h4 className="mt-4">Tagged Classes</h4>
+
+Alternatively, we could tag derived classes with some enumeration value, that way we could .
+
+```c++
+// The typed enumeration for tagging.
+enum class Tag { GUITAR, PIANO, UNKNOWN };
+
+// Base instruments would require a tag now.
+struct Instrument {
+    // We could denote base instruments however we like, but unknown feels suitable.
+    virtual Tag tag() const noexcept { return Tag::UNKNOWN; }
+};
+
+// And the derived instruments would inherit as necessary.
+struct Piano : public Instrument { Tag tag() const noexcept final { return Tag::PIANO; } };
+struct Guitar : public Instrument { Tag tag() const noexcept final { return Tag::GUITAR; } };
+```
+
+Now when checking types, we could match them accordingly:
+
+```c++
+void foo(Instrument* instrument) {
+    switch (instrument->tag()) {
+        case Tag::PIANO: std::println("Keys: {0}", dynamic_cast<Piano*>(instrument)->keys()); break;
+        case Tag::GUITAR: std::println("Frets: {0}", dynamic_cast<Piano*>(instrument)->frets()); break;
+    }
+}
+```
+
+However, we now have the new issue of additionally boiler-plate in requiring the `tag` method and manually defining types.
+
+<h4 className="mt-4">Over-Engineering RTTI</h4>
+
+What about we take the ideas that we have had previously, and implement the following:
+
+- Hashed types at compile-time
+- Embedding types through CRTP

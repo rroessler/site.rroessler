@@ -3,6 +3,9 @@ import { getPageMap } from 'nextra/page-map';
 import { FrontMatter, PageMapItem } from 'nextra';
 import { normalizePages } from 'nextra/normalize-pages';
 
+/// Package Modules
+import { Product } from '@/product';
+
 /** Posts Functionaltiy. */
 export type Posts = Posts.Item[];
 export namespace Posts {
@@ -51,8 +54,27 @@ export namespace Posts {
      * @param items                 Items to filter.
      */
     export function filter(items: Item[], nested = false) {
-        return (nested ? items.flatMap((item) => item.children ?? []) : items)
-            .filter((item) => item.name !== 'index')
-            .sort((a, b) => +new Date(b.frontMatter?.date) - +new Date(a.frontMatter?.date));
+        return (nested ? items.flatMap((item) => item.children ?? []) : items).filter(m_filter).sort(m_sort);
+    }
+
+    //  PRIVATE METHODS  //
+
+    /**
+     * Handles filtering items.
+     * @param item                  Item to filter.
+     */
+    function m_filter(item: Item) {
+        if (item.name === 'index') return false;
+        if (Product.development) return true;
+        return item.frontMatter?.draft !== true;
+    }
+
+    /**
+     * Handles sorting items.
+     * @param a                     Item alpha.
+     * @param b                     Item beta.
+     */
+    function m_sort(a: Item, b: Item) {
+        return +new Date(b.frontMatter?.date) - +new Date(a.frontMatter?.date);
     }
 }

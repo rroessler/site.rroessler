@@ -25,4 +25,7 @@ export namespace Product {
 
     /** Devtools identifier to be used. */
     export const uuid = '8ae24f56-1af9-49bb-99d6-e09babdfe87a';
+
+    /** Denotes if current in development mode. */
+    export const development = process.env.NODE_ENV === 'development';
 }
