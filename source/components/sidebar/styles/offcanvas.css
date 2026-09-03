@@ -1,5 +1,0 @@
-/*----------  Sidebar Styling  ----------*/
-
-.nav-anchor:not(:hover) {
-    color: var(--bs-body-color);
-}

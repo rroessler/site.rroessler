@@ -1,0 +1,6 @@
+/*----------  Vendor Styles  ----------*/
+
+@import 'tailwindcss';
+
+@import 'fumadocs-ui/css/';
+@import 'fumadocs-ui/css/preset.css';
