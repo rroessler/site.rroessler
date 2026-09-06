@@ -1,10 +1,11 @@
 ---
 title: Blog
+banner: nano new-post
+date: 1970-01-01
+href: https://www.nano-editor.org
+description: A collection of posts that I have written
 ---
 
-import { Page } from '@/components';
+import { Layout } from '@rroessler/layout';
 
-<Page.Title href="https://www.nano-editor.org">nano blogs</Page.Title>
-<Page.Subtitle className="mb-4">A collection of posts that I have written</Page.Subtitle>
-
-<Page.Overview route="/posts" nested />
+<Layout.Preview route="/blog" />

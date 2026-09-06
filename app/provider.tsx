@@ -8,5 +8,5 @@ import { RootProvider } from 'fumadocs-ui/provider/next';
 /** Core Provider Component. */
 export interface Provider extends PropsWithChildren {}
 export function Provider({ children }: Provider) {
-    return <RootProvider children={children} />;
+    return <RootProvider theme={{ storageKey: 'theme.mode' }} search={{ enabled: false }} children={children} />;
 }

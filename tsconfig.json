@@ -31,6 +31,9 @@
         "moduleResolution": "bundler",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "paths": { "@rroessler/*": ["./library/*"] }
+        "paths": {
+            "@rroessler/*": ["./library/*"],
+            "@rroessler/source/*": ["./.source/*", "./library/source/*"]
+        }
     }
 }
