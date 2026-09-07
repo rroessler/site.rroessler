@@ -10,16 +10,16 @@ import { Product } from '@rroessler/product';
 export interface Edited extends Edited.Props {}
 export async function Edited({ path, options = {}, className, ...props }: Edited) {
     // revise the outgoing options to be used and get the necessary last-modified details
-    const input = { path, owner: 'rroessler', repo: 'site.rroessler', ...options };
+    const input = { path: `docs/${path}`, owner: 'rroessler', repo: 'site.rroessler', ...options };
     const edited = Product.development ? null : await getGithubLastEdit(input).catch(() => null);
 
     // prepare a suitable format to be used as well
-    const format: Date.Format = { month: '2-digit', day: '2-digit', year: 'numeric' };
+    const format: Date.Format = { month: 'long', day: '2-digit', year: 'numeric' };
 
     // and construct a suitable last-updated timestamp to be used
     return (
         <div className={cn('text-fd-muted-foreground border-t mt-8 py-5', className)} {...props}>
-            Last updated on {(edited ?? new Date.Underlying()).toLocaleString('default', format)}
+            Last updated on {(edited ?? new Date.Underlying()).toLocaleString(undefined, format)}
         </div>
     );
 }
