@@ -15,7 +15,7 @@ export namespace Product {
     export const author = 'Reuben Roessler';
 
     /** Potential github profile. */
-    export const github = 'rroessler';
+    export const github = 'https://github.com/rroessler';
 
     /** Potential linked-in profile. */
     export const linkedin = 'https://linkedin.com/in/reuben-roessler';

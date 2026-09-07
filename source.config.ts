@@ -1,4 +1,6 @@
 /// Vendor Modules
+import readingTime from 'reading-time';
+import { toString } from 'mdast-util-to-string';
 import * as fumadocs from 'fumadocs-mdx/config';
 
 /// Website Modules
@@ -22,6 +24,13 @@ export default fumadocs.defineConfig({
             langs: [await Language.Talos.grammar()],
             themes: { light: 'github-light', dark: 'github-dark' },
         },
+        remarkPlugins: [
+            () => (tree, file: any) => {
+                const text = toString(tree);
+                const result = readingTime(text);
+                file.data.frontmatter.readingTime = result;
+            },
+        ],
     },
 });
 

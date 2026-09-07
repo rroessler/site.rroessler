@@ -2,7 +2,7 @@
 date: 2025-11-12
 title: Colorless Functions
 href: https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/
-description: My take on implementing async/await without function colors.
+description: My take on implementing async/await without function colors
 tags: [Talos, Languages, Concurrency]
 ---
 
@@ -95,7 +95,7 @@ With all things considered, solving colorless functions appears to be a daunting
 
 ### Awaiting Futures
 
-Let's begin our design by using [Talos](/projects/talos) and keeping Zig's `Future` object so that `future.await(){:zig}` is still valid. This would keep the benefits previously mentioned. For the creation of futures, we could _start_ by using a global variable for launching asynchronous functions to circumvent the runtime dependency that Zig contains.
+Let's begin our design by using [Talos](/projects/talos) and keeping Zig's `Future` object so that `future.await()` is still valid. This would keep the benefits previously mentioned. For the creation of futures, we could _start_ by using a global variable for launching asynchronous functions to circumvent the runtime dependency that Zig contains.
 
 ```talos
 // Some long-running task callback
@@ -114,14 +114,14 @@ But can we improve on this and allow for launching multiple runtime targets?
 
 ### Deferring Futures
 
-We could take Zig's original syntax for starting coroutines by using the `async callback(...){:zig}` syntax. However this exhibits similar readability issues to the `(await future).property(){:zig}` style. So let's instead apply the `async` keyword as an infix-operator instead of as a prefix-operator. This would give us the following syntax:
+We could take Zig's original syntax for starting coroutines by using the `async callback(...)` syntax. However this exhibits similar readability issues to the `(await future).property()` style. So let's instead apply the `async` keyword as an infix-operator instead of as a prefix-operator. This would give us the following syntax:
 
 ```talos
 // Possible inversion of the `async` operator
 let future = callback async(...);
 
 // Alternatively any operator sigil could be used
-let other = callback:(...);
+let other = callback::async(...);
 
 // This allows us to keep our clean method-chaining
 callback async().await().property();
@@ -135,12 +135,12 @@ This _could_ allow us to bind alternate runtimes if this capability is possible 
 let future = callback async[runtime](...);
 
 // Alternative runtime mixing for a sigil operator
-let other = callback:runtime(...);
+let other = callback::runtime(...);
 ```
 
 > **Note:** Currently Talos uses the `Future.async` static method to launch asynchronous execution. Eventually I would like to expand on this with the above syntax, but like any other programming language architect, I think there is still some room for improvement with the syntax (at least with readability, but this may stem from how unconventional this syntax is).
 
-Alternatively, we could have exposed a `.async` method on every function so that we could execute asynchronous tasks with `callback.async(...){:talos}`, however I strayed away from this as it somewhat muddies function typing (at least sadly for Talos). But this alternative could work well for other language models.
+Alternatively, we could have exposed a `.async` method on every function so that we could execute asynchronous tasks with `callback.async(...)`, however I strayed away from this as it somewhat muddies function typing (at least sadly for Talos). But this alternative could work well for other language models.
 
 ## Joining Threads
 

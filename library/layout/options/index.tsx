@@ -1,4 +1,5 @@
 /// Vendor Modules
+import { Gamepad2 } from 'lucide-react';
 import { Root } from 'fumadocs-core/page-tree';
 import { LinkItemType } from 'fumadocs-ui/layouts/shared';
 import { DocsLayoutProps } from 'fumadocs-ui/layouts/docs';
@@ -15,6 +16,12 @@ export interface Options extends Omit<DocsLayoutProps, 'children' | 'tree'> {}
 export function Options(overrides: Options = {}): Options {
     // prepare a set of custom links now
     const links: LinkItemType[] = [
+        {
+            type: 'icon',
+            url: '/quiz',
+            text: 'Weekly Fifty',
+            icon: <Gamepad2 />,
+        },
         {
             type: 'icon',
             text: 'LinkedIn',

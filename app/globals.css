@@ -4,3 +4,29 @@
 
 @import 'fumadocs-ui/css/preset.css';
 @import 'fumadocs-ui/css/vitepress.css';
+
+/*----------  Core Styles  ----------*/
+
+.page-title,
+.page-subtitle {
+    overflow: hidden;
+    position: relative;
+    padding-left: 2ch;
+    line-height: 1.25;
+    @apply font-mono;
+
+    &:before {
+        white-space: pre;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+}
+
+.page-title:before {
+    content: '>';
+}
+
+.page-subtitle:before {
+    content: '#\a#\a#\a#\a#\a#\a#\a#\a#\a#\a';
+}

@@ -2,7 +2,7 @@
 date: 2026-03-06
 title: No Progress Standard
 href: https://no-progress.org/
-description: A programming standard for disabling spinners and progress bars.
+description: A programming standard for disabling spinners and progress bars
 tags: [Talos, Languages]
 ---
 

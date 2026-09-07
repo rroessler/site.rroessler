@@ -45,22 +45,25 @@ export default async function Page(props: PageProps<'/[[...slug]]'>) {
     // determine a suitable subtitle to be used
     const subtitle = page.data.snippet ?? page.data.description;
     const banner = (
-        <Anchor className="font-mono" href={page.data.href}>
-            &gt; {page.data.banner ?? page.data.title} {page.data.draft ? '(draft)' : null}
+        <Anchor className="page-title" href={page.data.href}>
+            {page.data.banner ?? page.data.title} {page.data.draft ? '(draft)' : null}
         </Anchor>
     );
+
+    // prepare the last-updated time to be used as well
+    const updated = <Markdown.Edited key="updated" path={page.path} />;
 
     // prepare each of our components to be used
     const title = <DocsTitle key="title" children={banner} />;
     const body = <DocsBody key="body" children={<Content components={components} />} />;
-    const description = <DocsDescription key="description" className="mb-6" children={subtitle} />;
+    const description = <DocsDescription key="description" className="page-subtitle mb-6" children={subtitle} />;
 
     // and finally construct the resulting page
     return (
         <DocsPage
             tableOfContent={{ enabled: false }}
             breadcrumb={{ includePage: true }}
-            children={[title, description, body]}
+            children={[title, description, body, updated]}
         />
     );
 }

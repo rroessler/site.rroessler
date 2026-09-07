@@ -1,0 +1,21 @@
+/*----------  Actions Styling  ----------*/
+
+.quiz-actions {
+    z-index: 10;
+    position: sticky;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    top: var(--fd-header-height);
+}
+
+.quiz-view ul {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style-position: inside;
+}
+
+.quiz-disabled {
+    opacity: 0.5 !important;
+}

@@ -2,7 +2,7 @@
 date: 2025-11-06
 title: Faster Globbing
 href: https://github.com/rroessler/cpp.aster
-description: Efficient, compact and robust cross-platform C++ globbing.
+description: Efficient, compact and robust cross-platform C++ globbing
 tags: [C++, Globbing, Libraries]
 ---
 

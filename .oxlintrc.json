@@ -8,5 +8,8 @@
     "settings": {
         "react": { "version": "19.2.8" },
         "tailwindcss": { "callees": ["clsx", "cva", "cn"] }
+    },
+    "rules": {
+        "react/no-children-prop": "off"
     }
 }
