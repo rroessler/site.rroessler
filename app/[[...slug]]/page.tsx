@@ -55,15 +55,16 @@ export default async function Page(props: PageProps<'/[[...slug]]'>) {
 
     // prepare each of our components to be used
     const title = <DocsTitle key="title" children={banner} />;
+    const border = <div key="border" className=" border-b mb-4 pb-2" />;
     const body = <DocsBody key="body" children={<Content components={components} />} />;
-    const description = <DocsDescription key="description" className="page-subtitle mb-6" children={subtitle} />;
+    const description = <DocsDescription key="subtitle" className="page-subtitle mb-0" children={subtitle} />;
 
     // and finally construct the resulting page
     return (
         <DocsPage
             tableOfContent={{ enabled: false }}
             breadcrumb={{ includePage: true }}
-            children={[title, description, body, updated]}
+            children={[title, description, border, body, updated]}
         />
     );
 }
