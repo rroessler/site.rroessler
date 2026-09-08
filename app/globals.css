@@ -30,3 +30,7 @@
 .page-subtitle:before {
     content: '#\a#\a#\a#\a#\a#\a#\a#\a#\a#\a';
 }
+
+blockquote {
+    quotes: none !important;
+}
