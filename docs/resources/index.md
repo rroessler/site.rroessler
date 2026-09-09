@@ -11,6 +11,7 @@ description: A collection of links, articles and other resources I've saved
 - [How to Write a Code Formatter](https://yorickpeterse.com/articles/how-to-write-a-code-formatter)
 - [Destination Driven Code Generation](https://bernsteinbear.com/blog/ddcg)
 - [No Semicolons Needed](https://terts.dev/blog/no-semicolons-needed/)
+- [A Design Space Exploration of Async/Await](https://cel.cs.brown.edu/blog/design-space-async-await/)
 
 ## Programming Languages
 
