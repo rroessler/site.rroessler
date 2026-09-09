@@ -1,6 +1,6 @@
 ---
 title: Website
-repo: site.rroessler
+repo: rroessler.io
 banner: systemctl start website
 href: https://en.wikipedia.org/wiki/systemd
 snippet: That's right, the one you're viewing now
@@ -8,7 +8,7 @@ description: Portfolio website built to showcase my projects and development jou
 tags: [TypeScript, Website]
 ---
 
-This website is an [open-source](https://github.com/rroessler/site.rroessler) static [Next.js](https://nextjs.org/) application running on [GitHub Pages](https://docs.github.com/en/pages). For those interested, the simplified tech-stack that I am using is:
+This website is an [open-source](https://github.com/rroessler/rroessler.io) static [Next.js](https://nextjs.org/) application running on [GitHub Pages](https://docs.github.com/en/pages). For those interested, the simplified tech-stack that I am using is:
 
 - [Fumadocs](https://www.fumadocs.dev/)
 - [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)

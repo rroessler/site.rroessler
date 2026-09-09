@@ -1,7 +1,7 @@
 ---
 date: 2025-11-06
 title: Faster Globbing
-href: https://github.com/rroessler/cpp.aster
+href: https://github.com/rroessler/aster
 description: Efficient, compact and robust cross-platform C++ globbing
 tags: [C++, Globbing, Libraries]
 ---
@@ -69,4 +69,4 @@ More complexely, we could also construct sub-patterns from a list of components 
 
 Now although these optimizations are a great thought, actually implementing them is another story. For now I have been able to implement some component categorization with quite modest results, however as I wanted to get a library working firstly in C++ before worrying further, I have not yet implemented sub-patterns or other optimizations to the directory iteration portion of globbing.
 
-Regardless, I am able to present my framework [Aster](https://github.com/rroessler/cpp.aster) (a shortening of asterisk) as a reasonable first attempt at fast globbing performance for C++.
+Regardless, I am able to present my framework [Aster](https://github.com/rroessler/aster) (a shortening of asterisk) as a reasonable first attempt at fast globbing performance for C++.
